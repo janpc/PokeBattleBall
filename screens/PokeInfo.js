@@ -79,11 +79,9 @@ const PokeInfo = ({ id, move }) => {
           <TouchableHighlight
             activeOpacity={0.5}
             underlayColor="#00000000"
-            onPress={() => 
-              move(6)
-            }
+            onPress={() => move(6)}
           >
-            <Image source={tick} style={styles.tick}/>
+            <Image source={tick} style={styles.tick} />
           </TouchableHighlight>
         </ImageBackground>
       </View>
@@ -138,7 +136,18 @@ const Folder = ({ isShowingFirst, _change, info }) => {
     mainText,
     title,
   } = styles;
-  //on hi ha els textos hola i adeu aniria el teu contingut
+
+  const listTypes = info.types.map((item) => (
+    <Text style={mainText} key={item.slot}> -{capitalize(item.type.name)}</Text>
+  ));
+  
+  const listStats= info.stats.map((item) => (
+    <View style={row} key={item.stat.name}>
+      <Text style={title}>{capitalize(item.stat.name)}:</Text>
+      <Text style={mainText}> {item.base_stat}</Text>
+    </View>
+  ));
+  
   if (isShowingFirst) {
     return (
       <View style={[shadows, backSquare]}>
@@ -160,7 +169,7 @@ const Folder = ({ isShowingFirst, _change, info }) => {
                   data={info.moves}
                   renderItem={({ item }) => <Atack move={item.move} />}
                   keyExtractor={(item, index) => {
-                    item.move.name + index;
+                    index.toString() + item.move.name
                   }}
                   numColumns={1}
                 />
@@ -195,29 +204,8 @@ const Folder = ({ isShowingFirst, _change, info }) => {
                   </Text>
                 </View>
                 <Text style={title}>Types:</Text>
-                <FlatList
-                  data={info.types}
-                  renderItem={({ item }) => (
-                    <Text style={mainText}> -{capitalize(item.type.name)}</Text>
-                  )}
-                  keyExtractor={(item, index) => {
-                    item.type.name;
-                  }}
-                  numColumns={1}
-                />
-                <FlatList
-                  data={info.stats}
-                  renderItem={({ item }) => (
-                    <View style={row}>
-                      <Text style={title}>{capitalize(item.stat.name)}:</Text>
-                      <Text style={mainText}>  {item.base_stat}</Text>
-                    </View>
-                  )}
-                  keyExtractor={(item, index) => {
-                    item.stat.name;
-                  }}
-                  numColumns={1}
-                />
+                {listTypes}
+                {listStats}
               </ScrollView>
             </View>
           </View>
@@ -268,18 +256,18 @@ const MAIN_MARGIN = Dimensions.get("window").width * 0.05;
 
 const styles = StyleSheet.create({
   infoView: {
-    margin: MAIN_MARGIN*0.75,
-    marginLeft:MAIN_MARGIN*1.5,
+    margin: MAIN_MARGIN * 0.75,
+    marginLeft: MAIN_MARGIN * 1.5,
   },
   mainText: {
     fontSize: 16,
-    marginTop:MAIN_MARGIN*0.25,
+    marginTop: MAIN_MARGIN * 0.25,
   },
   title: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom:MAIN_MARGIN*0.25,
-    marginTop:MAIN_MARGIN*0.25,
+    marginBottom: MAIN_MARGIN * 0.25,
+    marginTop: MAIN_MARGIN * 0.25,
   },
   atackText: {
     fontSize: 18,
@@ -335,7 +323,7 @@ const styles = StyleSheet.create({
     backgroundColor: SECOND_COLOR,
     borderRadius: BORDER_REDIUS,
     marginTop: MAIN_MARGIN,
-    marginBottom: MAIN_MARGIN*0.75,
+    marginBottom: MAIN_MARGIN * 0.75,
   },
   topSquare: {
     position: "relative",
@@ -432,7 +420,7 @@ const styles = StyleSheet.create({
   tick: {
     height: 60,
     resizeMode: "contain",
-    marginTop: -MAIN_MARGIN*0.25,
-    left: MAIN_WIDTH*0.65,
+    marginTop: -MAIN_MARGIN * 0.25,
+    left: MAIN_WIDTH * 0.65,
   },
 });
