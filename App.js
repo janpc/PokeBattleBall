@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Filtres from "./screens/Filtres";
 import Combat from "./screens/Combat";
@@ -8,9 +8,10 @@ import Login from "./screens/Login";
 import PokeList from "./screens/PokeList";
 import Win from "./screens/Win";
 import { apisAreAvailable } from "expo";
+import { PokemonProvider, PokeContext } from "./model/Pokemon";
+import { observer } from "mobx-react";
 
 export default function App() {
-  const [pagina, setPagina] = useState(1);
   const [pokemonBo, setPokemonBo] = useState(6);
   const [pokemonDolent, setPokemonDolent] = useState(35);
   const [atack1, setAtack1] = useState(1);
@@ -20,43 +21,51 @@ export default function App() {
   function moveToScreen(a) {
     setPagina(a);
   }
-  function mainPokemon(id){
+  function mainPokemon(id) {
     setPokemonBo(id);
   }
+  return (
+    <PokemonProvider>
+      <Pagina />
+    </PokemonProvider>
+  )
+}
 
-  switch (pagina) {
+const Pagina = observer(() => {
+  const model = useContext(PokeContext);
+  switch (model.pagina) {
     case 1:
       return (
         <View style={styles.container}>
-          <Login move={moveToScreen}  />
+          <Login move={model.setPagina} />
         </View>
       );
       break;
     case 2:
       return (
         <View style={styles.container}>
-          <BattleVS move={moveToScreen} />
+          <BattleVS move={model.setPagina} />
         </View>
       );
       break;
     case 3:
       return (
         <View style={styles.container}>
-          <PokeList move={moveToScreen} setMainPokemon={mainPokemon}/>
+          <PokeList move={model.setPagina} setMainPokemon={mainPokemon} />
         </View>
       );
       break;
     case 4:
       return (
         <View style={styles.container}>
-          <Filtres move={moveToScreen} />
+          <Filtres move={model.setPagina} />
         </View>
       );
       break;
     case 5:
       return (
         <View style={styles.container}>
-          <PokeInfo move={moveToScreen} id={pokemonBo} />
+          <PokeInfo move={model.setPagina} id={pokemonBo} />
         </View>
       );
       break;
@@ -64,7 +73,7 @@ export default function App() {
       return (
         <View style={styles.container}>
           <Combat
-            move={moveToScreen}
+            move={model.setPagina}
             pokemonBo={pokemonBo}
             pokemonDolent={pokemonDolent}
             atack1={atack1}
@@ -78,7 +87,7 @@ export default function App() {
     case 7: {
       return (
         <View style={styles.container}>
-          <Win move={moveToScreen}/>
+          <Win move={model.setPagina} />
         </View>
       );
       break;
@@ -86,8 +95,7 @@ export default function App() {
     default:
       break;
   }
-}
-
+});
 const styles = StyleSheet.create({
   container: {
     flex: 1,
