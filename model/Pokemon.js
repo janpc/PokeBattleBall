@@ -13,9 +13,6 @@ const model = new PokeBattleBallModel();
 
 export const PokeContext = createContext(model);
 
-
 export const PokemonProvider = ({ children }) => {
-  
-  return (<PokeContext.provider value={model}>{children}</PokeContext.provider>);
+  return <PokeContext.Provider value={model}>{children}</PokeContext.Provider>;
 };
-
