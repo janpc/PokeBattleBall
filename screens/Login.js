@@ -1,16 +1,17 @@
-import React from "react";
+import React, {useContext }from "react";
 import { Image, ImageBackground, StyleSheet, TextInput, TouchableHighlight, View } from "react-native";
 import logo from "../assets/logo.png";
 import tick from "../assets/tick.png";
 const fons = "../assets/fons_app.png";
+import {PokeContext } from "../model/Pokemon";
 
-const Login = ({move}) => {
+const Login = () => {
   return (
     <View style={styles.container}>
       <ImageBackground source={require(fons)} style={styles.fons}>
         <Logo />
         <View style={styles.space} />
-        <Input move={move}/>        
+        <Input />        
       </ImageBackground>      
     </View>
   );
@@ -24,7 +25,8 @@ const Logo = () => {
   );
 };
 
-const Input = ({move}) => {
+const Input = () => {
+  const model = useContext(PokeContext);
   return(
     <View style={styles.login}>
         <View style={[styles.input, styles.shadows]}>
@@ -44,7 +46,7 @@ const Input = ({move}) => {
             activeOpacity={0.5}
             underlayColor="#00000000"
             onPress={() => 
-              move(2)
+              model.setPagina(2)
             }
           >
             <Image source={tick} style={styles.tick}/>

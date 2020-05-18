@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   TouchableHighlight,
@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import tick from "../assets/tick.png";
+import {PokeContext } from "../model/Pokemon";
 const fonsInfo = "../assets/info.png";
 
 function capitalize(str) {
@@ -49,6 +50,7 @@ const PokeInfo = ({ id, move }) => {
     pokemonName,
     row,
   } = styles;
+  const model = useContext(PokeContext);
   if (infoLoaded) {
     return (
       <View style={[pokeInfo]}>
@@ -58,7 +60,7 @@ const PokeInfo = ({ id, move }) => {
             size={36}
             color={"white"}
             backgroundColor="#3b5998"
-            onPress={() => move(3)}
+            onPress={() => model.setPagina(3)}
             style={[shadows, back]}
           />
           <View style={[fullWidth, center]}>
@@ -79,7 +81,7 @@ const PokeInfo = ({ id, move }) => {
           <TouchableHighlight
             activeOpacity={0.5}
             underlayColor="#00000000"
-            onPress={() => move(6)}
+            onPress={() => model.setPagina(6)}
           >
             <Image source={tick} style={styles.tick} />
           </TouchableHighlight>
@@ -95,7 +97,7 @@ const PokeInfo = ({ id, move }) => {
             size={36}
             color={"white"}
             backgroundColor="#3b5998"
-            onPress={() => move(2)}
+            onPress={() => model.setPagina(3)}
             style={[shadows, back]}
           />
         </ImageBackground>

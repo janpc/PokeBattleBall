@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import {PokeContext } from "../model/Pokemon";
 import {
   ActivityIndicator,
   Dimensions,
@@ -26,9 +27,9 @@ const PokePhoto = ({ id }) => {
   return <Image source={{ uri }} style={styles.photo} />;
 };
 
-const PokeList = ({ move, setMainPokemon }) => {
+const PokeList = ({setMainPokemon }) => {
   const [photolist, setPhotolist] = useState(null);
-
+  const model = useContext(PokeContext);
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=20")
       .then((res) => res.json())
@@ -42,7 +43,7 @@ const PokeList = ({ move, setMainPokemon }) => {
   return (
     <View style={styles.container}>
       <ImageBackground source={require(fons)} style={styles.fons}>
-        <Header move={move} />
+        <Header/>
         <View style={styles.list}>
           <FlatList
             data={photolist.results}
@@ -52,7 +53,7 @@ const PokeList = ({ move, setMainPokemon }) => {
                 activeOpacity={0.5}
                 underlayColor="#00000000"
                 onPress={() => {
-                  move(5);
+                  model.setPagina(5);
                   setMainPokemon(item.url.substring(34, item.url.length - 1))
                 }}
               >
@@ -71,7 +72,8 @@ const PokeList = ({ move, setMainPokemon }) => {
   );
 };
 
-const Header = ({move}) => {
+const Header = () => {
+  const model = useContext(PokeContext);
   return (
     <View style={styles.header}>
       <Back
@@ -80,7 +82,7 @@ const Header = ({move}) => {
         color={"white"}
         backgroundColor="black"
         style={[styles.back, styles.shadows]}
-        onPress={() => move(2)}
+        onPress={() => model.setPagina(2)}
       />
       <View style={[styles.searcher, styles.shadows]}>
         <TextInput placeholder="search..." />
@@ -89,7 +91,7 @@ const Header = ({move}) => {
         activeOpacity={0.5}
         underlayColor="#00000000"
         onPress={() => {
-          move(4);
+          model.setPagina(4)
         }}
       >
         <Image source={filter} style={styles.filt} />

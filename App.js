@@ -12,18 +12,7 @@ import { PokemonProvider, PokeContext } from "./model/Pokemon";
 import { observer } from "mobx-react";
 
 export default function App() {
-  const [pokemonBo, setPokemonBo] = useState(6);
-  const [pokemonDolent, setPokemonDolent] = useState(35);
-  const [atack1, setAtack1] = useState(1);
-  const [atack2, setAtack2] = useState(2);
-  const [atack3, setAtack3] = useState(3);
-  const [atack4, setAtack4] = useState(4);
-  function moveToScreen(a) {
-    setPagina(a);
-  }
-  function mainPokemon(id) {
-    setPokemonBo(id);
-  }
+  
   return (
     <PokemonProvider>
       <Pagina />
@@ -32,6 +21,15 @@ export default function App() {
 }
 
 const Pagina = observer(() => {
+  const [pokemonBo, setPokemonBo] = useState(6);
+  const [pokemonDolent, setPokemonDolent] = useState(35);
+  const [atack1, setAtack1] = useState(1);
+  const [atack2, setAtack2] = useState(2);
+  const [atack3, setAtack3] = useState(3);
+  const [atack4, setAtack4] = useState(4);
+  function mainPokemon(id) {
+    setPokemonBo(id);
+  }
   const model = useContext(PokeContext);
   switch (model.pagina) {
     case 1:

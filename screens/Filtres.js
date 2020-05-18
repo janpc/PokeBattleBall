@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   TouchableHighlight,
@@ -11,10 +11,10 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import GenerationButton from "../components/GenerationButton.js";
 import TypeButton from "../components/TypeButton.js";
-
+import {PokeContext } from "../model/Pokemon";
 const fonsFiltres = "../assets/filtres.png";
 
-const Filtres = ({ move }) => {
+const Filtres = () => {
   
   const [generation, setGeneration] = useState([]);
   const [types, setTypes] = useState([]);
@@ -63,6 +63,7 @@ const Filtres = ({ move }) => {
     fons,
     center,
   } = styles;
+  const model = useContext(PokeContext);
   return (
     <View style={pestanyes}>
       <ImageBackground source={require(fonsFiltres)} style={fons}>
@@ -71,7 +72,7 @@ const Filtres = ({ move }) => {
           size={36}
           color={"white"}
           backgroundColor="#3b5998"
-          onPress={() => move(3)}
+          onPress={() => model.setPagina(3)}
           style={[shadows, back]}
         />
         <View style={[center]}>

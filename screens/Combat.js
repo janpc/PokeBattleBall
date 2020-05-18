@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useContext} from "react";
 import {
   StyleSheet,
   TouchableHighlight,
@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import {PokeContext } from "../model/Pokemon";
 const fonsFiltres = "../assets/combat.jpg";
 
 function capitalize(str){
@@ -65,8 +65,42 @@ const Combat = ({
       setMove4(json);
     });
   },[]);
-  
-  
+  const model = useContext(PokeContext);
+  const SE = 1.2;
+  const NVE = 0.5;
+  const NE = 0;
+  const moveEffects = [{
+    bug: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: NVE, flying: NVE, ghost: 1, grass: SE, ground: 1, ice: 1, normal: 1, poison: SE, psychic: SE, rock: NVE, water: 1},
+
+    dragon: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1},
+
+    electric: {bug: 1, dragon: 1, electric: NVE, fighting: 1, fire: 1, flying: SE, ghost: 1, grass: NVE, ground: NE, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: SE},
+
+    fighting: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: NVE, ghost: NE, grass: 1, ground: 1, ice: SE, normal: SE, poison: 1, psychic: NVE, rock: SE, water: 1},
+
+    fire: {bug: SE, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: SE, ground: 1, ice: SE, normal: 1, poison: 1, psychic: 1, rock: NVE, water: NVE},
+
+    flying: {bug: SE, dragon: 1, electric: NVE, fighting: SE, fire: 1, flying: 1, ghost: 1, grass: SE, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: NVE, water: 1},
+
+    ghost: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: NE, poison: 1, psychic: NE, rock: 1, water: 1},
+
+    grass: {bug: NVE, dragon: 1, electric: 1, fighting: 1, fire: NVE, flying: NVE, ghost: 1, grass: NVE, ground: SE, ice: 1, normal: 1, poison: NVE, psychic: 1, rock: SE, water: SE},
+
+    ground: {bug: 1, dragon: 1, electric: SE, fighting: 1, fire: SE, flying: NE, ghost: 1, grass: NVE, ground: 1, ice: 1, normal: 1, poison: SE, psychic: 1, rock: SE, water: 1},
+    
+    ice: {bug: 1, dragon: SE, electric: 1, fighting: 1, fire: 1, flying: SE, ghost: 1, grass: SE, ground: SE, ice: NVE, normal: 1, poison: 1, psychic: 1, rock: 1, water: NVE},
+
+    normal: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: NE, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1},
+
+    poison: {bug: SE, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: SE, ground: NVE, ice: 1, normal: 1, poison: NVE, psychic: 1, rock: NVE, water: 1},
+
+    psychic: {bug: 1, dragon: 1, electric: 1, fighting: SE, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: SE, psychic: NVE, rock: 1, water: 1},
+
+    rock: {bug: SE, dragon: 1, electric: NVE, fighting: 1, fire: SE, flying: SE, ghost: 1, grass: 1, ground: 1, ice: SE, normal: 1, poison: 1, psychic: 1, rock: NVE, water: 1},
+    
+    water: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: SE, flying: 1, ghost: 1, grass: NVE, ground: SE, ice: NVE, normal: 1, poison: 1, psychic: 1, rock: SE, water: 1},
+
+  }];
 
   const {
     row,
@@ -88,7 +122,7 @@ const Combat = ({
           size={36}
           color={"white"}
           backgroundColor="#3b5998"
-          onPress={() => move(2)}
+          onPress={() => model.setPagina(2)}
           style={back}
         />
         <View style={[column, center, combatMain]}>
@@ -113,7 +147,8 @@ const Combat = ({
   );
 };
 
-const Atack = ({ move, moveToPage }) => {
+const Atack = ({ move}) => {
+  const model = useContext(PokeContext);
   const { atack, shadows, atackText } = styles;
   var name="undefined";
   if (typeof(move.name) !== 'undefined') {
@@ -126,7 +161,8 @@ const Atack = ({ move, moveToPage }) => {
       activeOpacity={0.5}
       underlayColor="#00000000"
       onPress={() => {
-        moveToPage(7);
+        //alert(moveEffects.$(move.type.name).$(aliat.types[0].type))
+        model.setPagina(7);
       }}
     >
       <View style={[atack, shadows]}><Text style={atackText}>{name}</Text></View>

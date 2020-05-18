@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -7,7 +7,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
-
+import {PokeContext } from "../model/Pokemon";
 const WinBg = "../assets/backgroundWin.png";
 
 import PokeWinIcon from "../assets/pokeWinicon.png";
@@ -15,7 +15,8 @@ import WinTick from "../assets/winTick.png";
 import youWinWhite from "../assets/youWinWhite.png";
 import youWin from "../assets/youWin.png";
 
-const Win = ({ move }) => {
+const Win = () => {
+  const model = useContext(PokeContext);
   return (
     <View style={styles.page}>
       <ImageBackground source={require(WinBg)} style={styles.image}>
@@ -29,7 +30,7 @@ const Win = ({ move }) => {
           activeOpacity={0.5}
           underlayColor="#00000000"
           onPress={() => {
-            move(2);
+            model.setPagina(2);
           }}
         >
           <Image source={WinTick} style={styles.WinTick}></Image>

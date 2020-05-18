@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -7,6 +7,7 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import {PokeContext } from "../model/Pokemon";
 
 const BattleBg = "../assets/backgroundBattle.jpg";
 
@@ -16,32 +17,33 @@ import RoundedIA from "../assets/RoundedIA.png";
 import RoundedOnline from "../assets/RoundedOnline.png";
 import settings from "../assets/settings.png";
 
-const BattleVS = ({ move }) => {
+const BattleVS = () => {
   return (
     <View style={styles.page}>
       <ImageBackground source={require(BattleBg)} style={styles.image}>
-        <Up move={move}/>
+        <Up />
 
-        <Down move={move}/>
+        <Down />
       </ImageBackground>
     </View>
   );
 };
 
-const Up = ({ move }) => {
+const Up = () => {
+  const model = useContext(PokeContext);
   return (
     <View style={styles.up}>
       <TouchableHighlight
         activeOpacity={0.5}
         underlayColor="#00000000"
-        onPress={() => move(3)}
+        onPress={() => model.setPagina(3)}
       >
         <Image source={RoundedOnline} style={styles.roundedOnline}></Image>
       </TouchableHighlight>
       <TouchableHighlight
         activeOpacity={0.5}
         underlayColor="#00000000"
-        onPress={() => move(3)}
+        onPress={() => model.setPagina(3)}
       >
         <Image source={Online} style={styles.online}></Image>
       </TouchableHighlight>
@@ -49,27 +51,28 @@ const Up = ({ move }) => {
   );
 };
 
-const Down = ({move}) => {
+const Down = () => {
+  const model = useContext(PokeContext);
   return (
     <View style={styles.down}>
       <TouchableHighlight
         activeOpacity={0.5}
         underlayColor="#00000000"
-        onPress={() => move(3)}
+        onPress={() => model.setPagina(3)}
       >
       <Image source={RoundedIA} style={styles.roundedIA}></Image>
       </TouchableHighlight>
       <TouchableHighlight
         activeOpacity={0.5}
         underlayColor="#00000000"
-        onPress={() => move(3)}
+        onPress={() => model.setPagina(3)}
       >
       <Image source={CPU} style={styles.cpu}></Image>
       </TouchableHighlight>
       <TouchableHighlight
         activeOpacity={0.5}
         underlayColor="#00000000"
-        onPress={() => move(3)}
+        onPress={() => model.setPagina(3)}
       >
       <Image source={settings} style={styles.settings}></Image>
       </TouchableHighlight>
