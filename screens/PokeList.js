@@ -11,6 +11,7 @@ import {
   TouchableHighlight,
   View,
 } from "react-native";
+import { observer } from "mobx-react";
 import Back from "react-native-vector-icons/FontAwesome";
 import filter from "../assets/adjust_1.png";
 import Win from "./Win";
@@ -27,16 +28,16 @@ const PokePhoto = ({ id }) => {
   return <Image source={{ uri }} style={styles.photo} />;
 };
 
-const PokeList = ({setMainPokemon }) => {
+const PokeList = observer(({setMainPokemon }) => {
   const [photolist, setPhotolist] = useState(null);
   const model = useContext(PokeContext);
-  useEffect(() => {
+  /*useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=20")
       .then((res) => res.json())
       .then((json) => setPhotolist(json));
-  }, []);
+  }, []);*/
 
-  if (photolist == null) {
+  if (model.pokemons == null) {
     return <ActivityIndicator size="large" />;
   }
 
@@ -46,7 +47,7 @@ const PokeList = ({setMainPokemon }) => {
         <Header/>
         <View style={styles.list}>
           <FlatList
-            data={photolist.results}
+            data={model.pokemons.results}
             numColumns={numColumns}
             renderItem={({ item }) => (
               <TouchableHighlight
@@ -70,7 +71,7 @@ const PokeList = ({setMainPokemon }) => {
       </ImageBackground>
     </View>
   );
-};
+});
 
 const Header = () => {
   const model = useContext(PokeContext);

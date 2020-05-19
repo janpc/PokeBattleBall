@@ -169,7 +169,7 @@ const Atack = ({ move, moveEffects, enemic}) => {
       activeOpacity={0.5}
       underlayColor="#00000000"
       onPress={() => {
-        alert(enemic.types[0].type.name+': '+moveEffects[move.type.name][enemic.types[0].type.name]);
+        alert(move.power*moveEffects[move.type.name][enemic.types[0].type.name]);
         model.setPagina(7);
       }}
     >
