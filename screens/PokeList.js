@@ -1,19 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
-import {PokeContext } from "../model/Pokemon";
-import {
-  ActivityIndicator,
-  Dimensions,
-  FlatList,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  TextInput,
-  TouchableHighlight,
-  View,
-} from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { ActivityIndicator, Dimensions, FlatList, Image, ImageBackground, StyleSheet, TextInput, TouchableHighlight, View } from "react-native";
 import Back from "react-native-vector-icons/FontAwesome";
 import filter from "../assets/adjust_1.png";
-import Win from "./Win";
+import { PokeContext } from "../model/Pokemon";
+
+import {observer} from "mobx-react";
+
 const fons = "../assets/fons_app.png";
 
 const numColumns = 3;
@@ -27,16 +19,16 @@ const PokePhoto = ({ id }) => {
   return <Image source={{ uri }} style={styles.photo} />;
 };
 
-const PokeList = ({setMainPokemon }) => {
+const PokeList = observer(({setMainPokemon }) => {
   const [photolist, setPhotolist] = useState(null);
   const model = useContext(PokeContext);
   useEffect(() => {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=20")
       .then((res) => res.json())
-      .then((json) => setPhotolist(json));
+      .then((json) => model.setPokemons(json));
   }, []);
 
-  if (photolist == null) {
+  if (model.pokemons == null) {
     return <ActivityIndicator size="large" />;
   }
 
@@ -46,7 +38,7 @@ const PokeList = ({setMainPokemon }) => {
         <Header/>
         <View style={styles.list}>
           <FlatList
-            data={photolist.results}
+            data={model.pokemons.results}
             numColumns={numColumns}
             renderItem={({ item }) => (
               <TouchableHighlight
@@ -70,10 +62,13 @@ const PokeList = ({setMainPokemon }) => {
       </ImageBackground>
     </View>
   );
-};
+});
+
 
 const Header = () => {
   const model = useContext(PokeContext);
+
+
   return (
     <View style={styles.header}>
       <Back
@@ -85,7 +80,7 @@ const Header = () => {
         onPress={() => model.setPagina(2)}
       />
       <View style={[styles.searcher, styles.shadows]}>
-        <TextInput placeholder="search..." />
+        <TextInput placeholder="search..." onChangeText={text => model.filtering(text)}/>
       </View>
       <TouchableHighlight
         activeOpacity={0.5}
