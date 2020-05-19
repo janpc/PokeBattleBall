@@ -5,14 +5,34 @@ class PokeBattleBallModel {
   @observable pagina = 1;
   @observable pokemons = [];
 
+  @observable pokemons = [];
+
+  @observable data = [];
+
+  @observable filter = "";
+
   @action setPagina(p) {
     this.pagina = p;
   }
-  
-  @action loadPokemons() {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=20")
-      .then((res) => res.json())
-      .then((json) => this.pokemons=json);
+
+  @action setPokemons(k) {
+    this.pokemons = k;
+    this.data = k;
+  }
+  @action filtering(f) {
+    if (f!="" && this.pokemons!=[]){
+      this.filter = f;
+      this.data=this.pokemons.filter(item => {
+        return item.name.toLowerCase().match(f)
+      });
+      
+      alert(this.data.map(item=>item.name));
+    }
+    else {
+      this.filter = "";
+      this.data = this.pokemons;
+    }
+    
   }
 }
 
