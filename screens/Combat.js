@@ -69,39 +69,47 @@ const Combat = ({
   const SE = 1.2;
   const NVE = 0.5;
   const NE = 0;
-  const moveEffects = [{
-    bug: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: NVE, flying: NVE, ghost: 1, grass: SE, ground: 1, ice: 1, normal: 1, poison: SE, psychic: SE, rock: NVE, water: 1},
+  const moveEffects = {
+    bug: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: NVE, flying: NVE, ghost: 1, grass: SE, ground: 1, ice: 1, normal: 1, poison: SE, psychic: SE, rock: NVE, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    dragon: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1},
+    dragon: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    electric: {bug: 1, dragon: 1, electric: NVE, fighting: 1, fire: 1, flying: SE, ghost: 1, grass: NVE, ground: NE, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: SE},
+    electric: {bug: 1, dragon: 1, electric: NVE, fighting: 1, fire: 1, flying: SE, ghost: 1, grass: NVE, ground: NE, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: SE, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    fighting: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: NVE, ghost: NE, grass: 1, ground: 1, ice: SE, normal: SE, poison: 1, psychic: NVE, rock: SE, water: 1},
+    fighting: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: NVE, ghost: NE, grass: 1, ground: 1, ice: SE, normal: SE, poison: 1, psychic: NVE, rock: SE, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    fire: {bug: SE, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: SE, ground: 1, ice: SE, normal: 1, poison: 1, psychic: 1, rock: NVE, water: NVE},
+    fire: {bug: SE, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: SE, ground: 1, ice: SE, normal: 1, poison: 1, psychic: 1, rock: NVE, water: NVE, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    flying: {bug: SE, dragon: 1, electric: NVE, fighting: SE, fire: 1, flying: 1, ghost: 1, grass: SE, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: NVE, water: 1},
+    flying: {bug: SE, dragon: 1, electric: NVE, fighting: SE, fire: 1, flying: 1, ghost: 1, grass: SE, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: NVE, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    ghost: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: NE, poison: 1, psychic: NE, rock: 1, water: 1},
+    ghost: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: NE, poison: 1, psychic: NE, rock: 1, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    grass: {bug: NVE, dragon: 1, electric: 1, fighting: 1, fire: NVE, flying: NVE, ghost: 1, grass: NVE, ground: SE, ice: 1, normal: 1, poison: NVE, psychic: 1, rock: SE, water: SE},
+    grass: {bug: NVE, dragon: 1, electric: 1, fighting: 1, fire: NVE, flying: NVE, ghost: 1, grass: NVE, ground: SE, ice: 1, normal: 1, poison: NVE, psychic: 1, rock: SE, water: SE, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    ground: {bug: 1, dragon: 1, electric: SE, fighting: 1, fire: SE, flying: NE, ghost: 1, grass: NVE, ground: 1, ice: 1, normal: 1, poison: SE, psychic: 1, rock: SE, water: 1},
+    ground: {bug: 1, dragon: 1, electric: SE, fighting: 1, fire: SE, flying: NE, ghost: 1, grass: NVE, ground: 1, ice: 1, normal: 1, poison: SE, psychic: 1, rock: SE, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
     
-    ice: {bug: 1, dragon: SE, electric: 1, fighting: 1, fire: 1, flying: SE, ghost: 1, grass: SE, ground: SE, ice: NVE, normal: 1, poison: 1, psychic: 1, rock: 1, water: NVE},
+    ice: {bug: 1, dragon: SE, electric: 1, fighting: 1, fire: 1, flying: SE, ghost: 1, grass: SE, ground: SE, ice: NVE, normal: 1, poison: 1, psychic: 1, rock: 1, water: NVE, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    normal: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: NE, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1},
+    normal: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: NE, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    poison: {bug: SE, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: SE, ground: NVE, ice: 1, normal: 1, poison: NVE, psychic: 1, rock: NVE, water: 1},
+    poison: {bug: SE, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: SE, ground: NVE, ice: 1, normal: 1, poison: NVE, psychic: 1, rock: NVE, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    psychic: {bug: 1, dragon: 1, electric: 1, fighting: SE, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: SE, psychic: NVE, rock: 1, water: 1},
+    psychic: {bug: 1, dragon: 1, electric: 1, fighting: SE, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: SE, psychic: NVE, rock: 1, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-    rock: {bug: SE, dragon: 1, electric: NVE, fighting: 1, fire: SE, flying: SE, ghost: 1, grass: 1, ground: 1, ice: SE, normal: 1, poison: 1, psychic: 1, rock: NVE, water: 1},
+    rock: {bug: SE, dragon: 1, electric: NVE, fighting: 1, fire: SE, flying: SE, ghost: 1, grass: 1, ground: 1, ice: SE, normal: 1, poison: 1, psychic: 1, rock: NVE, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
     
-    water: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: SE, flying: 1, ghost: 1, grass: NVE, ground: SE, ice: NVE, normal: 1, poison: 1, psychic: 1, rock: SE, water: 1},
+    water: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: SE, flying: 1, ghost: 1, grass: NVE, ground: SE, ice: NVE, normal: 1, poison: 1, psychic: 1, rock: SE, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
-  }];
+    dark: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
 
+    fairy: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
+
+    unknown: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
+
+    shadow: {bug: 1, dragon: 1, electric: 1, fighting: 1, fire: 1, flying: 1, ghost: 1, grass: 1, ground: 1, ice: 1, normal: 1, poison: 1, psychic: 1, rock: 1, water: 1, dark: 1, fairy: 1, unknown: 1, shadow: 1,},
+
+  };
+ 
   const {
     row,
     fons,
@@ -136,10 +144,10 @@ const Combat = ({
             <PokeImg num={pokemonBo} />
           </View>
           <View style={[atackView, column]}>
-            <Atack move={move1} moveToPage={move}/>
-            <Atack move={move2} moveToPage={move}/>
-            <Atack move={move3} moveToPage={move}/>
-            <Atack move={move4} moveToPage={move}/>
+            <Atack move={move1} enemic={enemic} moveEffects={moveEffects}/>
+            <Atack move={move2} enemic={enemic} moveEffects={moveEffects}/>
+            <Atack move={move3} enemic={enemic}  moveEffects={moveEffects}/>
+            <Atack move={move4} enemic={enemic} moveEffects={moveEffects}/>
           </View>
         </View>
       </ImageBackground>
@@ -147,21 +155,21 @@ const Combat = ({
   );
 };
 
-const Atack = ({ move}) => {
+const Atack = ({ move, moveEffects, enemic}) => {
   const model = useContext(PokeContext);
   const { atack, shadows, atackText } = styles;
   var name="undefined";
   if (typeof(move.name) !== 'undefined') {
     name=capitalize(move.name);
   }
-  
+
   
   return (
     <TouchableHighlight
       activeOpacity={0.5}
       underlayColor="#00000000"
       onPress={() => {
-        //alert(moveEffects.$(move.type.name).$(aliat.types[0].type))
+        alert(enemic.types[0].type.name+': '+moveEffects[move.type.name][enemic.types[0].type.name]);
         model.setPagina(7);
       }}
     >
