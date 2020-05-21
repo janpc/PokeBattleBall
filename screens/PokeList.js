@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext,  useState } from "react";
 import { ActivityIndicator, Dimensions, FlatList, Image, ImageBackground, StyleSheet, TextInput, TouchableHighlight, View } from "react-native";
 import Back from "react-native-vector-icons/FontAwesome";
 import filter from "../assets/adjust_1.png";
@@ -19,14 +19,10 @@ const PokePhoto = ({ id }) => {
   return <Image source={{ uri }} style={styles.photo} />;
 };
 
-const PokeList = observer(({setMainPokemon }) => {
+const PokeList = observer(() => {
   const [photolist, setPhotolist] = useState(null);
   const model = useContext(PokeContext);
-  useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=964")
-      .then((res) => res.json())
-      .then((json) => model.setPokemons(json.results));
-  }, []);
+  
 
   if (model.pokemons == null) {
     return <ActivityIndicator size="large" />;
@@ -46,7 +42,7 @@ const PokeList = observer(({setMainPokemon }) => {
                 underlayColor="#00000000"
                 onPress={() => {
                   model.setPagina(5);
-                  setMainPokemon(item.url.substring(34, item.url.length - 1))
+                  model.setPokemonBo(item.url.substring(34, item.url.length - 1));
                 }}
               >
                 <View style={[styles.backPoke, styles.shadows]}>
@@ -57,6 +53,7 @@ const PokeList = observer(({setMainPokemon }) => {
             keyExtractor={(item, index) =>
               item.url.substring(34, item.url.length - 1)
             }
+            length={model.data.length}
           />
         </View>
       </ImageBackground>

@@ -13,24 +13,14 @@ import GenerationButton from "../components/GenerationButton.js";
 import TypeButton from "../components/TypeButton.js";
 import {PokeContext } from "../model/Pokemon";
 const fonsFiltres = "../assets/filtres.png";
+import { observer } from "mobx-react";
 
-const Filtres = () => {
-  
-  const [generation, setGeneration] = useState([]);
-  const [types, setTypes] = useState([]);
+const Filtres = observer(() => {
+
   /////////////DATA/////////////////
   useEffect(()=>{
-    fetch("https://pokeapi.co/api/v2/generation")
-    .then((res) => res.json())
-    .then((json) => {
-      setGeneration(json.results);
-    });
-
-  fetch("https://pokeapi.co/api/v2/type/")
-    .then((res) => res.json())
-    .then((json) => {
-      setTypes(json.results);
-    });
+    model.setGeneration();
+    model.setTypes();
   }, [])
   
 
@@ -76,20 +66,21 @@ const Filtres = () => {
           style={[shadows, back]}
         />
         <View style={[center]}>
-          <Folder generation={generation} typesImg={typesImg}/>
+          <Folder typesImg={typesImg}/>
         </View>
       </ImageBackground>
     </View>
   );
-};
+});
 
 export default Filtres;
 
-const Folder = ({ generation, typesImg }) => {
+const Folder = observer(({typesImg }) => {
   const [isShowingFirst, setisShowingFirst] = useState(true);
   const _change = () => {
     setisShowingFirst(!isShowingFirst);
   };
+  const model = useContext(PokeContext);
   const {
     backSquare,
     topSquare,
@@ -118,7 +109,7 @@ const Folder = ({ generation, typesImg }) => {
           <View style={[shadows, mainSquareFirst]}>
             <View style={[content]}>
               <FlatList
-                data={generation}
+                data={model.generation}
                 renderItem={({ item }) => (
                   <GenerationButton
                     generation={item.name.substring(11).toUpperCase()}
@@ -162,7 +153,7 @@ const Folder = ({ generation, typesImg }) => {
       </View>
     );
   }
-};
+});
 
 const MAIN_COLOR = "#fff";
 const BACKGROUND_COLOR = "#00000000";

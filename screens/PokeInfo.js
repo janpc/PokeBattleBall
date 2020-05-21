@@ -9,10 +9,12 @@ import {
   FlatList,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import tick from "../assets/tick.png";
 import {PokeContext } from "../model/Pokemon";
+import { observer } from "mobx-react";
 const fonsInfo = "../assets/info.png";
 
 function capitalize(str) {
@@ -22,21 +24,14 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const PokeInfo = ({ id, move }) => {
+const PokeInfo = observer(() => {
   const [isShowingFirst, setisShowingFirst] = useState(true);
-  const [info, setInfo] = useState([]);
-  const [infoLoaded, setInfoLoaded] = useState(false);
   const _change = () => {
     setisShowingFirst(!isShowingFirst);
   };
 
   useEffect(() => {
-    fetch("https://pokeapi.co/api/v2/pokemon/" + id + "/")
-      .then((res) => res.json())
-      .then((json) => {
-        setInfo(json);
-        setInfoLoaded(true);
-      });
+    model.setAliat();
   }, []);
 
   const {
@@ -51,7 +46,7 @@ const PokeInfo = ({ id, move }) => {
     row,
   } = styles;
   const model = useContext(PokeContext);
-  if (infoLoaded) {
+  if (model.aliatLoaded) {
     return (
       <View style={[pokeInfo]}>
         <ImageBackground source={require(fonsInfo)} style={fons}>
@@ -67,15 +62,14 @@ const PokeInfo = ({ id, move }) => {
             <View style={[row]}>
               <View style={[nameView]}>
                 <Text style={[pokemonName, shadows]}>
-                  {capitalize(info.name)}
+                  {capitalize(model.aliat.name)}
                 </Text>
               </View>
-              <PokeImg link={info.sprites.front_default} />
+              <PokeImg link={model.aliat.sprites.front_default} />
             </View>
             <Folder
               isShowingFirst={isShowingFirst}
               _change={_change}
-              info={info}
             />
           </View>
           <TouchableHighlight
@@ -100,11 +94,12 @@ const PokeInfo = ({ id, move }) => {
             onPress={() => model.setPagina(3)}
             style={[shadows, back]}
           />
+          <ActivityIndicator size="large" />
         </ImageBackground>
       </View>
     );
   }
-};
+});
 
 export default PokeInfo;
 
@@ -122,7 +117,7 @@ const PokeImg = ({ link }) => {
   );
 };
 
-const Folder = ({ isShowingFirst, _change, info }) => {
+const Folder = ({ isShowingFirst, _change}) => {
   const {
     backSquare,
     topSquare,
@@ -138,12 +133,12 @@ const Folder = ({ isShowingFirst, _change, info }) => {
     mainText,
     title,
   } = styles;
-
-  const listTypes = info.types.map((item) => (
+  const model = useContext(PokeContext);
+  const listTypes = model.aliat.types.map((item) => (
     <Text style={mainText} key={item.slot}> -{capitalize(item.type.name)}</Text>
   ));
   
-  const listStats= info.stats.map((item) => (
+  const listStats= model.aliat.stats.map((item) => (
     <View style={row} key={item.stat.name}>
       <Text style={title}>{capitalize(item.stat.name)}:</Text>
       <Text style={mainText}> {item.base_stat}</Text>
@@ -168,7 +163,7 @@ const Folder = ({ isShowingFirst, _change, info }) => {
             <View style={[content]}>
               <View style={center}>
                 <FlatList
-                  data={info.moves}
+                  data={model.aliat.moves}
                   renderItem={({ item }) => <Atack move={item.move} />}
                   keyExtractor={(item, index) => {
                     index.toString() + item.move.name
@@ -202,7 +197,7 @@ const Folder = ({ isShowingFirst, _change, info }) => {
                   <Text style={title}>Species:</Text>
                   <Text style={mainText}>
                     {"  "}
-                    {capitalize(info.species.name)}
+                    {capitalize(model.aliat.species.name)}
                   </Text>
                 </View>
                 <Text style={title}>Types:</Text>
