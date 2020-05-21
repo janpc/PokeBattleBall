@@ -45,11 +45,40 @@ class PokeBattleBallModel {
 
   @observable pokemonDolent = 35;
 
-  @action setPokmondolent(a) {
-    this.pokemonDolent = a;
+  @action setPokmondolent() {
+    this.pokemonDolent = Math.floor(Math.random() * 964) + 1;
   }
 
-  @observable atacks = [1, 2, 3, 4];
+  @observable atacks = [];
+  @observable isOn=false;
+  includes = false;
+
+  @action setNullAtacks(){
+    this.atacks.splice(0, 4);
+    this.atacks=[];
+  }
+  @action includesAtack(a){
+    this.includes=false;
+    this.atacks.map(atack=>{if(atack==a){
+      this.includes=true;
+    }})
+  }
+  @action toggleAtack(a){
+    this.includes=false;
+    
+    if(!this.includes){
+      if(this.atacks.length<4){
+        this.atacks.push(a);
+        this.isOn = true;
+      }else{
+        this.isOn = false;
+      }
+    } else{
+      this.atacks.splice(this.atacks.indexOf(a), 1);
+      this.isOn = false;
+    }
+    
+  }
 
   @observable aliat = {};
   @observable aliatLoaded = false;
