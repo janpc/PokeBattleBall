@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import tick from "../assets/tick.png";
-import {PokeContext } from "../model/Pokemon";
+import { PokeContext } from "../model/Pokemon";
 import { observer } from "mobx-react";
 const fonsInfo = "../assets/info.png";
 
@@ -34,6 +34,9 @@ const PokeInfo = observer(() => {
     model.setAliat();
   }, []);
 
+
+  
+
   const {
     fons,
     pokeInfo,
@@ -47,6 +50,7 @@ const PokeInfo = observer(() => {
   } = styles;
   const model = useContext(PokeContext);
   if (model.aliatLoaded) {
+    model.setNullAtacks();
     return (
       <View style={[pokeInfo]}>
         <ImageBackground source={require(fonsInfo)} style={fons}>
@@ -67,15 +71,20 @@ const PokeInfo = observer(() => {
               </View>
               <PokeImg link={model.aliat.sprites.front_default} />
             </View>
-            <Folder
-              isShowingFirst={isShowingFirst}
-              _change={_change}
-            />
+            <Folder isShowingFirst={isShowingFirst} _change={_change} />
           </View>
           <TouchableHighlight
             activeOpacity={0.5}
             underlayColor="#00000000"
-            onPress={() => model.setPagina(6)}
+            onPress={() => 
+              {if(model.atacks.length<4){
+                alert("You have to select 4 attacks, you only have " + model.atacks.length +" selected")
+              }else{
+                model.setPokmondolent();
+                model.setPagina(6)
+              }
+            }
+              }
           >
             <Image source={tick} style={styles.tick} />
           </TouchableHighlight>
@@ -117,7 +126,7 @@ const PokeImg = ({ link }) => {
   );
 };
 
-const Folder = ({ isShowingFirst, _change}) => {
+const Folder = ({ isShowingFirst, _change }) => {
   const {
     backSquare,
     topSquare,
@@ -135,16 +144,19 @@ const Folder = ({ isShowingFirst, _change}) => {
   } = styles;
   const model = useContext(PokeContext);
   const listTypes = model.aliat.types.map((item) => (
-    <Text style={mainText} key={item.slot}> -{capitalize(item.type.name)}</Text>
+    <Text style={mainText} key={item.slot}>
+      {" "}
+      -{capitalize(item.type.name)}
+    </Text>
   ));
-  
-  const listStats= model.aliat.stats.map((item) => (
+
+  const listStats = model.aliat.stats.map((item) => (
     <View style={row} key={item.stat.name}>
       <Text style={title}>{capitalize(item.stat.name)}:</Text>
       <Text style={mainText}> {item.base_stat}</Text>
     </View>
   ));
-  
+
   if (isShowingFirst) {
     return (
       <View style={[shadows, backSquare]}>
@@ -166,7 +178,7 @@ const Folder = ({ isShowingFirst, _change}) => {
                   data={model.aliat.moves}
                   renderItem={({ item }) => <Atack move={item.move} />}
                   keyExtractor={(item, index) => {
-                    index.toString() + item.move.name
+                    index.toString() + item.move.name;
                   }}
                   numColumns={1}
                 />
@@ -212,27 +224,32 @@ const Folder = ({ isShowingFirst, _change}) => {
   }
 };
 
-const Atack = ({ move }) => {
-  const { atack, shadows, atackText } = styles;
+const Atack = observer(({ move }) => {
+  const model = useContext(PokeContext);
+  model.includesAtack(id);
+  const [isOn, setIsOn] = useState(model.includes);
+  
+  const { atack, shadows, atackText, atackOn } = styles;
   var name = "undefined";
   if (typeof move.name !== "undefined") {
     name = capitalize(move.name);
   }
-
+  var id = move.url.substring(31, move.url.length - 1);
   return (
     <TouchableHighlight
       activeOpacity={0.5}
       underlayColor="#00000000"
       onPress={() => {
-        alert("atack");
+        model.toggleAtack(id);
+        setIsOn(model.isOn);
       }}
     >
-      <View style={[atack, shadows]}>
+      <View style={[isOn ? atackOn : atack, shadows]}>
         <Text style={atackText}>{name}</Text>
       </View>
     </TouchableHighlight>
   );
-};
+});
 
 //color de fons
 const BACKGROUND_COLOR = "#123456";
@@ -268,6 +285,8 @@ const styles = StyleSheet.create({
   },
   atackText: {
     fontSize: 18,
+    color: "white",
+    fontWeight:"bold",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -275,9 +294,18 @@ const styles = StyleSheet.create({
   atack: {
     width: MAIN_WIDTH * 0.85,
     height: 40,
-    backgroundColor: "#FFF082",
+    backgroundColor: "#5FC0DF",
     borderRadius: 20,
     margin: 10,
+    justifyContent: "center",
+  },
+  atackOn: {
+    width: MAIN_WIDTH * 0.85,
+    height: 40,
+    backgroundColor: "#04CF62",
+    borderRadius: 20,
+    margin: 10,
+    justifyContent: "center",
   },
   shadows: {
     shadowColor: "black",

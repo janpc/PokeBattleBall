@@ -27,10 +27,8 @@ class PokeBattleBallModel {
     if (f != "" && this.pokemons != []) {
       this.filter = f;
       this.data = this.pokemons.filter((item) => {
-        return item.name.toLowerCase().match(f);
+        return item.name.match(f.toLowerCase());
       });
-
-      alert(this.data.map((item) => item.name));
     } else {
       this.filter = "";
       this.data = this.pokemons;
@@ -55,7 +53,7 @@ class PokeBattleBallModel {
 
   @action setNullAtacks(){
     this.atacks.splice(0, 4);
-    this.atacks=[];
+    alert(this.atacks.length);
   }
   @action includesAtack(a){
     this.includes=false;
@@ -65,7 +63,9 @@ class PokeBattleBallModel {
   }
   @action toggleAtack(a){
     this.includes=false;
-    
+    this.atacks.map(atack=>{if(atack==a){
+      this.includes=true;
+    }})
     if(!this.includes){
       if(this.atacks.length<4){
         this.atacks.push(a);
@@ -84,7 +84,7 @@ class PokeBattleBallModel {
   @observable aliatLoaded = false;
 
   @action setAliat() {
-    if (!this.aliatLoaded) {
+    if (!this.aliatLoaded || String.valueOf(this.aliat.id)!=this.pokemonBo) {
       fetch("https://pokeapi.co/api/v2/pokemon/" + this.pokemonBo + "/")
         .then((res) => res.json())
         .then((json) => {
@@ -126,7 +126,6 @@ class PokeBattleBallModel {
         .then((json) => {
           this.generation=json.results;
           this.generationLoaded = true;
-          alert("DD");
         });
     }
   }

@@ -20,7 +20,7 @@ const PokePhoto = ({ id }) => {
 };
 
 const PokeList = observer(() => {
-  const [photolist, setPhotolist] = useState(null);
+
   const model = useContext(PokeContext);
   
 
@@ -35,14 +35,15 @@ const PokeList = observer(() => {
         <View style={styles.list}>
           <FlatList
             data={model.data}
+            initialNumToRender={24}
             numColumns={numColumns}
             renderItem={({ item }) => (
               <TouchableHighlight
                 activeOpacity={0.5}
                 underlayColor="#00000000"
                 onPress={() => {
-                  model.setPagina(5);
                   model.setPokemonBo(item.url.substring(34, item.url.length - 1));
+                  model.setPagina(5);
                 }}
               >
                 <View style={[styles.backPoke, styles.shadows]}>
@@ -53,7 +54,6 @@ const PokeList = observer(() => {
             keyExtractor={(item, index) =>
               item.url.substring(34, item.url.length - 1)
             }
-            length={model.data.length}
           />
         </View>
       </ImageBackground>

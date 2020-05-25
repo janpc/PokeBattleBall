@@ -30,6 +30,7 @@ const Win = () => {
           activeOpacity={0.5}
           underlayColor="#00000000"
           onPress={() => {
+            model.setNullAtacks();
             model.setPagina(2);
           }}
         >
