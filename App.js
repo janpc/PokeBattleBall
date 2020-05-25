@@ -1,3 +1,4 @@
+import "mobx-react-lite/batchingForReactNative";
 import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Filtres from "./screens/Filtres";
@@ -14,13 +15,13 @@ import { observer } from "mobx-react";
 export default function App() {
   const model = useContext(PokeContext);
   useEffect(() => {
-      model.setPokemons();
+    model.setPokemons();
   }, []);
   return (
     <PokemonProvider>
       <Pagina />
     </PokemonProvider>
-  )
+  );
 }
 
 const Pagina = observer(() => {
@@ -29,7 +30,7 @@ const Pagina = observer(() => {
     case 1:
       return (
         <View style={styles.container}>
-          <Login/>
+          <Login />
         </View>
       );
       break;
@@ -43,28 +44,28 @@ const Pagina = observer(() => {
     case 3:
       return (
         <View style={styles.container}>
-          <PokeList/>
+          <PokeList />
         </View>
       );
       break;
     case 4:
       return (
         <View style={styles.container}>
-          <Filtres/>
+          <Filtres />
         </View>
       );
       break;
     case 5:
       return (
         <View style={styles.container}>
-          <PokeInfo/>
+          <PokeInfo />
         </View>
       );
       break;
     case 6:
       return (
         <View style={styles.container}>
-          <Combat/>
+          <Combat />
         </View>
       );
       break;
