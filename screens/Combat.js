@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState} from "react";
 import {
   StyleSheet,
   TouchableHighlight,
@@ -26,13 +26,13 @@ const Combat = observer(() => {
   useEffect(() => {
     model.setAliat();
     model.setEnemic();
-    model.setMoves();
+    model.setFullAttacks();
   }, []);
   const model = useContext(PokeContext);
   const SE = 1.2;
   const NVE = 0.5;
   const NE = 0;
-  const moveEffects = {
+  const attackEffects = {
     bug: {
       bug: 1,
       dragon: 1,
@@ -463,7 +463,7 @@ const Combat = observer(() => {
     combatMain,
     atackView,
   } = styles;
-  if (model.aliat == {} || model.enemic == {} || model.moves == []) {
+  if (model.aliat == {} || model.enemic == {} || model.fullAttacks == []) {
     <View style={combat}>
       <ImageBackground source={require(fonsFiltres)} style={fons}>
         <Icon
@@ -500,8 +500,8 @@ const Combat = observer(() => {
             <PokeImg num={model.pokemonBo} />
           </View>
           <View style={[atackView, column]}>
-            {model.moves.map((m) => (
-              <Atack move={m} moveEffects={moveEffects} />
+            {model.fullAttacks.map((m) => (
+              <Atack attack={m} attackEffects={attackEffects} />
             ))}
           </View>
         </View>
@@ -510,12 +510,12 @@ const Combat = observer(() => {
   );
 });
 
-const Atack = ({ move, moveEffects }) => {
+const Atack = ({ attack, attackEffects }) => {
   const model = useContext(PokeContext);
   const { atack, shadows, atackText } = styles;
   var name = "undefined";
-  if (typeof move.name !== "undefined") {
-    name = capitalize(move.name);
+  if (typeof attack.name !== "undefined") {
+    name = capitalize(attack.name);
   }
 
   return (
@@ -524,8 +524,8 @@ const Atack = ({ move, moveEffects }) => {
       underlayColor="#00000000"
       onPress={() => {
         alert(
-          move.power *
-            moveEffects[move.type.name][model.enemic.types[0].type.name]
+          attack.power *
+            attackEffects[attack.type.name][model.enemic.types[0].type.name]
         );
         model.setPagina(7);
       }}
@@ -539,16 +539,18 @@ const Atack = ({ move, moveEffects }) => {
 
 const PokeImg = ({ num }) => {
   const { image, shadows, pokemonImgView } = styles;
+  const [error, setError] = num==null? useState(true) : useState(false);
+  var uri = !error ? "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" +
+  num +
+  ".png" : "https://bluedomain.online/wp-content/uploads/ultimatemember/default_prof_pic.png";
   return (
     <View style={[pokemonImgView, shadows]}>
       <Image
         style={[image]}
         source={{
-          uri:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" +
-            num +
-            ".png",
+          uri: uri,
         }}
+        onError={() => setError(true)}
       />
     </View>
   );

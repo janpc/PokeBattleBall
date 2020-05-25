@@ -1,4 +1,4 @@
-import React, { useContext,  useState } from "react";
+import React, { useContext,  useState, useEffect} from "react";
 import { ActivityIndicator, Dimensions, FlatList, Image, ImageBackground, StyleSheet, TextInput, TouchableHighlight, View } from "react-native";
 import Back from "react-native-vector-icons/FontAwesome";
 import filter from "../assets/adjust_1.png";
@@ -13,16 +13,18 @@ const screenWidth = Dimensions.get("window").width;
 const pokeSize = Math.floor(screenWidth / numColumns);
 
 const PokePhoto = ({ id }) => {
-  const uri = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-
-  console.log(uri);
-  return <Image source={{ uri }} style={styles.photo} />;
+  const [error, setError] = useState(false);
+  var uri = !error ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png` : "https://bluedomain.online/wp-content/uploads/ultimatemember/default_prof_pic.png";
+  return <Image source={{ uri }} style={styles.photo} onError={() => setError(true)} />;
 };
 
 const PokeList = observer(() => {
 
   const model = useContext(PokeContext);
   
+  useEffect(() => {
+    model.setEmptyAliat();
+  }, []);
 
   if (model.pokemons == null) {
     return <ActivityIndicator size="large" />;
@@ -44,10 +46,11 @@ const PokeList = observer(() => {
                 onPress={() => {
                   model.setPokemonBo(item.url.substring(34, item.url.length - 1));
                   model.setPagina(5);
+                  model.defaultData();
                 }}
               >
                 <View style={[styles.backPoke, styles.shadows]}>
-                  <PokePhoto id={item.url.substring(34, item.url.length - 1)} />
+                  <PokePhoto id={item.url!=null? item.url.substring(34, item.url.length - 1) : null} />
                 </View>
               </TouchableHighlight>
             )}

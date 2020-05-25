@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 
 class PokeBattleBallModel {
   @observable pagina = 1;
@@ -8,7 +8,7 @@ class PokeBattleBallModel {
     this.pagina = p;
   }
 
-  @observable pokemons = [];
+  pokemons = [];
 
   @action setPokemons() {
     fetch("https://pokeapi.co/api/v2/pokemon?limit=964")
@@ -21,8 +21,6 @@ class PokeBattleBallModel {
 
   @observable data = [];
 
-  @observable filter = "";
-
   @action filtering(f) {
     if (f != "" && this.pokemons != []) {
       this.filter = f;
@@ -30,58 +28,54 @@ class PokeBattleBallModel {
         return item.name.match(f.toLowerCase());
       });
     } else {
-      this.filter = "";
       this.data = this.pokemons;
     }
   }
+  @action defaultData(){
+    this.data=this.pokemons;
+  }
 
-  @observable pokemonBo = 6;
+  pokemonBo = 6;
 
   @action setPokemonBo(a) {
     this.pokemonBo = a;
   }
 
-  @observable pokemonDolent = 35;
+  pokemonDolent = 35;
 
   @action setPokmondolent() {
     this.pokemonDolent = Math.floor(Math.random() * 964) + 1;
-  }
-
-  @observable atacks = [];
-  @observable isOn=false;
-  includes = false;
-
-  @action setNullAtacks(){
-    this.atacks.splice(0, 4);
-    alert(this.atacks.length);
-  }
-  @action includesAtack(a){
-    this.includes=false;
-    this.atacks.map(atack=>{if(atack==a){
-      this.includes=true;
-    }})
-  }
-  @action toggleAtack(a){
-    this.includes=false;
-    this.atacks.map(atack=>{if(atack==a){
-      this.includes=true;
-    }})
-    if(!this.includes){
-      if(this.atacks.length<4){
-        this.atacks.push(a);
-        this.isOn = true;
-      }else{
-        this.isOn = false;
-      }
-    } else{
-      this.atacks.splice(this.atacks.indexOf(a), 1);
-      this.isOn = false;
-    }
+    
     
   }
 
+  @observable atacks = [];
+
+  @action setNullAtacks(){
+    this.atacks.splice(0, 4);
+  }
+  includesAtack(a){
+    includes=false;
+    this.atacks.forEach(atack=>{if(atack==a){
+      includes=true;
+    }})
+    return includes;
+  }
+  @action toggleAtack(a){
+    includes=false;
+    this.atacks.forEach(atack=>{if(atack==a){
+      includes=true;
+    }})
+    if(!includes){
+      if(this.atacks.length<4){
+        this.atacks.push(a);
+      }
+    } else{
+      this.atacks.splice(this.atacks.indexOf(a), 1);
+    }
+  }
+
   @observable aliat = {};
-  @observable aliatLoaded = false;
 
   @action setAliat() {
     if (!this.aliatLoaded || String.valueOf(this.aliat.id)!=this.pokemonBo) {
@@ -89,30 +83,44 @@ class PokeBattleBallModel {
         .then((res) => res.json())
         .then((json) => {
           this.aliat = json;
-          this.aliatLoaded = true;
         });
     }
+  }
+  @action setEmptyAliat(){
+    this.aliat={};
   }
 
   @observable enemic = {};
 
   @action setEnemic() {
-    fetch("https://pokeapi.co/api/v2/pokemon/" + this.pokemonDolent + "/")
+
+    done=false;
+    while(!done){
+      fetch("https://pokeapi.co/api/v2/pokemon/" + this.pokemonDolent + "/")
       .then((res) => res.json())
       .then((json) => {
         this.enemic = json;
       });
+      if(this.enemic!=null){
+        done=true;
+      }
+      else{
+        this.pokemonDolent = Math.floor(Math.random() * 964) + 1;
+      }
+      
+    }
+    
   }
 
-  @observable moves = [];
+  @observable fullAttacks = [];
 
-  @action setMoves() {
-    this.moves == [];
+  @action setFullAttacks() {
+    this.fullAttacks == [];
     this.atacks.map((a) =>
       fetch("https://pokeapi.co/api/v2/move/" + a + "/")
         .then((res) => res.json())
         .then((json) => {
-          this.moves.push(json);
+          this.fullAttacks.push(json);
         })
     );
   }
