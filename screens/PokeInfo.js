@@ -138,7 +138,7 @@ const Folder = ({ isShowingFirst, _change }) => {
   } = styles;
   const model = useContext(PokeContext);
   const listTypes = model.aliat.types.map((item) => (
-    <Text style={mainText} key={item.slot}>
+    <Text style={mainText} key={item.type.name}>
       {" "}
       -{capitalize(item.type.name)}
     </Text>
@@ -170,10 +170,10 @@ const Folder = ({ isShowingFirst, _change }) => {
               <View style={center}>
                 <FlatList
                   data={model.aliat.moves}
-                  renderItem={({ item }) => <Atack move={item.move} />}
-                  keyExtractor={(item, index) => {
-                    index.toString() + item.move.name;
-                  }}
+                  renderItem={({ item }) => <Atack move={item.move}/>}
+                  keyExtractor={(item, index) => 
+                    item.name
+                  }
                   numColumns={1}
                 />
               </View>

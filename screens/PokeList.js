@@ -36,7 +36,7 @@ const PokeList = observer(() => {
         <Header/>
         <View style={styles.list}>
           <FlatList
-            data={model.data}
+            data={model.data.slice(0, model.data.length-2)} //mobx es queixava de que s’intentava excedir a posicions de memòria que no existeixen (la 964 i 965 sobre 964) 
             initialNumToRender={24}
             numColumns={numColumns}
             renderItem={({ item }) => (
@@ -55,7 +55,7 @@ const PokeList = observer(() => {
               </TouchableHighlight>
             )}
             keyExtractor={(item, index) =>
-              item.url.substring(34, item.url.length - 1)
+              item.name
             }
           />
         </View>
