@@ -46,8 +46,7 @@ const PokeInfo = observer(() => {
     row,
   } = styles;
   const model = useContext(PokeContext);
-
-  model.setNullAtacks();
+  
   return (
     <View style={[pokeInfo]}>
       <ImageBackground source={require(fonsInfo)} style={fons}>

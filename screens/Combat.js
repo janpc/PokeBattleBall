@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { PokeContext } from "../model/Pokemon";
-import { observable } from "mobx";
 import { observer } from "mobx-react";
 const fonsFiltres = "../assets/combat.jpg";
 
@@ -53,28 +52,24 @@ const Combat = observer(() => {
           functionAttack(damage, false);
           showText(2, attack.name, damage);
         }, 1000);
-      } else {
+      } else if(!end) {
         setTorn(true);
       }
     }, 3500);
   }
   // mira les vides i si s'ha eliminat a algun pokemos, s'espera 5s a que es mostri el missatge i mostra el missatge de victoria.
-  if(perVidaAliat == 0 && !end){
+  if (perVidaAliat == 0 && !end) {
     setEnd(true);
     this.timeoutHandle = setTimeout(() => {
-        model.setPagina(8);
-        setPerVidaAliat(1);
-        setPerVidaEnemic(1);
-      }, 3500)
-    };
-  if(perVidaEnemic == 0 && !end){
+      model.setPagina(8);
+    }, 3600);
+  }
+  if (perVidaEnemic == 0 && !end) {
     setEnd(true);
     this.timeoutHandle = setTimeout(() => {
-        model.setPagina(7);
-        setPerVidaAliat(1);
-        setPerVidaEnemic(1);
-      }, 3500)
-    };
+      model.setPagina(7);
+    }, 3600);
+  }
 
   function functionAttack(damage, aliat) {
     var vida;
@@ -628,7 +623,6 @@ const Atack = ({ attack, attackEffects, showText, torn, functionAttack }) => {
           );
           showText(1, name, damage);
         }
-        //model.setPagina(7);
       }}
     >
       <View style={[atack, shadows]}>

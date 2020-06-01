@@ -51,6 +51,7 @@ class PokeBattleBallModel {
 
   @action setNullAtacks() {
     this.atacks.splice(0, 4);
+    this.fullAttacks.splice(0, 4);
   }
   includesAtack(a) {
     includes = false;
@@ -115,7 +116,7 @@ class PokeBattleBallModel {
   @observable fullAttacks = [];
 
   @action setFullAttacks() {
-    this.fullAttacks == [];
+    
     this.atacks.map((a) =>
       fetch("https://pokeapi.co/api/v2/move/" + a + "/")
         .then((res) => res.json())
