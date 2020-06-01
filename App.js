@@ -1,6 +1,6 @@
 import "mobx-react-lite/batchingForReactNative";
-import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useContext } from "react";
+import { StyleSheet, View } from "react-native";
 import Filtres from "./screens/Filtres";
 import Combat from "./screens/Combat";
 import PokeInfo from "./screens/PokeInfo";
@@ -9,7 +9,6 @@ import Login from "./screens/Login";
 import PokeList from "./screens/PokeList";
 import Win from "./screens/Win";
 import Lost from "./screens/Lost";
-import { apisAreAvailable } from "expo";
 import { PokemonProvider, PokeContext } from "./model/Pokemon";
 import { observer } from "mobx-react";
 

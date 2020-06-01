@@ -59,22 +59,22 @@ const Combat = observer(() => {
     }, 3500);
   }
   // mira les vides i si s'ha eliminat a algun pokemos, s'espera 5s a que es mostri el missatge i mostra el missatge de victoria.
-  perVidaAliat == 0
-    ? (this.timeoutHandle = setTimeout(() => {
+  if(perVidaAliat == 0 && !end){
+    setEnd(true);
+    this.timeoutHandle = setTimeout(() => {
         model.setPagina(8);
-        setEnd(true);
         setPerVidaAliat(1);
         setPerVidaEnemic(1);
-      }, 3500))
-    : null;
-  perVidaEnemic == 0
-    ? (this.timeoutHandle = setTimeout(() => {
+      }, 3500)
+    };
+  if(perVidaEnemic == 0 && !end){
+    setEnd(true);
+    this.timeoutHandle = setTimeout(() => {
         model.setPagina(7);
-        setEnd(true);
         setPerVidaAliat(1);
         setPerVidaEnemic(1);
-      }, 3500))
-    : null;
+      }, 3500)
+    };
 
   function functionAttack(damage, aliat) {
     var vida;
