@@ -8,6 +8,7 @@ import BattleVS from "./screens/BattleVS";
 import Login from "./screens/Login";
 import PokeList from "./screens/PokeList";
 import Win from "./screens/Win";
+import Lost from "./screens/Lost";
 import { apisAreAvailable } from "expo";
 import { PokemonProvider, PokeContext } from "./model/Pokemon";
 import { observer } from "mobx-react";
@@ -69,16 +70,24 @@ const Pagina = observer(() => {
         </View>
       );
       break;
-    case 7: {
+    case 7: 
       return (
         <View style={styles.container}>
           <Win />
         </View>
       );
       break;
+    case 8: {
+    return (
+      <View style={styles.container}>
+        <Lost />
+      </View>
+    );
+    break;
     }
     default:
       break;
+    
   }
 });
 const styles = StyleSheet.create({

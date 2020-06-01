@@ -61,9 +61,8 @@ const Combat = observer(() => {
   // mira les vides i si s'ha eliminat a algun pokemos, s'espera 5s a que es mostri el missatge i mostra el missatge de victoria.
   perVidaAliat == 0
     ? (this.timeoutHandle = setTimeout(() => {
-        model.setPagina(7);
+        model.setPagina(8);
         setEnd(true);
-        alert("derrota");
         setPerVidaAliat(1);
         setPerVidaEnemic(1);
       }, 3500))
