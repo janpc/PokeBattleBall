@@ -14,7 +14,7 @@ import PokeWinIcon from "../assets/pokeWinicon.png";
 import WinTick from "../assets/winTick.png";
 import youLost from "../assets/youLost.png";
 
-const Win = () => {
+const Lost = () => {
   const model = useContext(PokeContext);
   return (
     <View style={styles.page}>
@@ -43,7 +43,7 @@ const Win = () => {
 const MAIN_MARGIN = Dimensions.get("window").width * 0.05;
 const WIDTH = Dimensions.get("window").width;
 
-export default Win;
+export default Lost;
 
 const styles = StyleSheet.create({
   page: {
