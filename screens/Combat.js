@@ -718,12 +718,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
+    fontFamily: "Lato-Regular",
   },
   atackText: {
     fontSize: 18,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
+    fontFamily: "Lato-Regular",
   },
   atackView: {
     margin: 10,
@@ -766,7 +768,7 @@ const styles = StyleSheet.create({
   pokemonName: {
     color: "white",
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Lato-Black",
   },
   nameView: {
     flex: 0.6,

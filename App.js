@@ -1,6 +1,6 @@
 import "mobx-react-lite/batchingForReactNative";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import React, { useEffect, useContext } from "react";
-import { StyleSheet, View } from "react-native";
 import Filtres from "./screens/Filtres";
 import Combat from "./screens/Combat";
 import PokeInfo from "./screens/PokeInfo";
@@ -11,17 +11,34 @@ import Win from "./screens/Win";
 import Lost from "./screens/Lost";
 import { PokemonProvider, PokeContext } from "./model/Pokemon";
 import { observer } from "mobx-react";
+import { useFonts}  from '@use-expo/font';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Lato-Regular": require("./assets/fonts/Lato-Regular.ttf"),
+    "Lato-Bold": require("./assets/fonts/Lato-Bold.ttf"),
+    "Lato-Black": require("./assets/fonts/Lato-Black.ttf"),
+  });
+
   const model = useContext(PokeContext);
   useEffect(() => {
     model.setPokemons();
   }, []);
+
+  if(!fontsLoaded){
+    return(
+      <View>
+        <ActivityIndicator />
+      </View>
+    )
+  } 
+  
   return (
     <PokemonProvider>
       <Pagina />
     </PokemonProvider>
   );
+  
 }
 
 const Pagina = observer(() => {

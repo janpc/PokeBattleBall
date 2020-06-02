@@ -79,7 +79,7 @@ const Header = () => {
         onPress={() => model.setPagina(2)}
       />
       <View style={[styles.searcher, styles.shadows]}>
-        <TextInput placeholder="search..." onChangeText={text => model.filtering(text)}/>
+        <TextInput style={styles.font} placeholder="search..." onChangeText={text => model.filtering(text)}/>
       </View>
       <TouchableHighlight
         activeOpacity={0.5}
@@ -195,4 +195,7 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
   },
+  font: {
+    fontFamily: "Lato-Regular",
+  }
 });

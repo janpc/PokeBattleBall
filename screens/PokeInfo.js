@@ -265,17 +265,18 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 16,
     marginTop: MAIN_MARGIN * 0.25,
+    fontFamily: "Lato-Regular",
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
     marginBottom: MAIN_MARGIN * 0.25,
     marginTop: MAIN_MARGIN * 0.25,
+    fontFamily: "Lato-Black",
   },
   atackText: {
     fontSize: 18,
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Lato-Black",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
   topText: {
     fontSize: 16,
     textAlign: "center",
-    fontWeight: "bold",
+    fontFamily: "Lato-Black",
   },
   row: {
     flexDirection: "row",
@@ -419,8 +420,8 @@ const styles = StyleSheet.create({
   pokemonName: {
     color: "white",
     fontSize: 26,
-    fontWeight: "bold",
     marginLeft: 10,
+    fontFamily: "Lato-Black",
   },
   nameView: {
     flexDirection: "column",
