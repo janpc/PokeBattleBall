@@ -12,7 +12,6 @@ const WinBg = "../assets/backgroundWin.png";
 
 import PokeWinIcon from "../assets/pokeWinicon.png";
 import WinTick from "../assets/winTick.png";
-import youWinWhite from "../assets/youWinWhite.png";
 import youWin from "../assets/youWin.png";
 
 const Win = () => {
