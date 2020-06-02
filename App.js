@@ -1,8 +1,6 @@
 import "mobx-react-lite/batchingForReactNative";
-import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import React, { useEffect, useContext } from "react";
-import { StyleSheet, View } from "react-native";
 import Filtres from "./screens/Filtres";
 import Combat from "./screens/Combat";
 import PokeInfo from "./screens/PokeInfo";
