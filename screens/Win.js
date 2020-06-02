@@ -12,7 +12,6 @@ const WinBg = "../assets/backgroundWin.png";
 
 import PokeWinIcon from "../assets/pokeWinicon.png";
 import WinTick from "../assets/winTick.png";
-import youWinWhite from "../assets/youWinWhite.png";
 import youWin from "../assets/youWin.png";
 
 const Win = () => {
@@ -21,7 +20,7 @@ const Win = () => {
     <View style={styles.page}>
       <ImageBackground source={require(WinBg)} style={styles.image}>
         <View>
-          <Image source={youWin} style={styles.youWinWhite}></Image>
+          <Image source={youWin} style={styles.youWin}></Image>
 
         </View>
 
@@ -73,15 +72,11 @@ const styles = StyleSheet.create({
     marginLeft: MAIN_MARGIN * 8,
     marginTop: MAIN_MARGIN * 2.5,
   },
-  youWinWhite: {
+  youWin: {
     height: 100,
     width: WIDTH * 1,
     marginLeft: MAIN_MARGIN * 0.15,
     marginTop: MAIN_MARGIN * 7,
   },
-  youWinRed: {
-    height: 100,
-    width: WIDTH * 1,
-    marginTop: MAIN_MARGIN * -5,
-  },
+  
 });
