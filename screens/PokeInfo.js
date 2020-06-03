@@ -46,7 +46,7 @@ const PokeInfo = observer(() => {
     row,
   } = styles;
   const model = useContext(PokeContext);
-  
+
   return (
     <View style={[pokeInfo]}>
       <ImageBackground source={require(fonsInfo)} style={fons}>
@@ -169,10 +169,8 @@ const Folder = ({ isShowingFirst, _change }) => {
               <View style={center}>
                 <FlatList
                   data={model.aliat.moves}
-                  renderItem={({ item }) => <Atack move={item.move}/>}
-                  keyExtractor={(item, index) => 
-                    item.name
-                  }
+                  renderItem={({ item }) => <Atack move={item.move} />}
+                  keyExtractor={(item) => item.move.name}
                   numColumns={1}
                 />
               </View>
