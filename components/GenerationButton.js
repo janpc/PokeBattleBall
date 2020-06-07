@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Dimensions, View, Text, TouchableHighlight } from "react-native";
 import {PokeContext } from "../model/Pokemon";
 

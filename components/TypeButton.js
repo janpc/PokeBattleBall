@@ -1,29 +1,34 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  TouchableHighlight,
-  View,
-  Dimensions,
-  Image,
-} from "react-native";
+import React, { useContext } from "react";
+import { Dimensions, Image, StyleSheet, TouchableHighlight, View } from "react-native";
+import {PokeContext } from "../model/Pokemon";
 
-const TypeButton = ({ img }) => {
-  const { typeButton, text, shadows, image} = styles;
+
+const TypeButton = ({ img, type }) => {
+  const model = useContext(PokeContext);
+  const { typeButton, text, shadows, image } = styles;
   return (
     <View style={[typeButton, shadows]}>
-      <Image
-      style={[image]}
-        source={{
-          uri:
-            "https://gamepedia.cursecdn.com/pokemongo_" +img,
+      <TouchableHighlight
+        onPress={() => {
+          model.setDefaultData();
+          model.setTipus(type);
+          model.setPagina(3);
         }}
-      />
+      >
+        
+        <Image
+          style={[image]}
+          source={{
+            uri: "https://gamepedia.cursecdn.com/pokemongo_" + img,
+          }}
+        />
+      </TouchableHighlight>
     </View>
   );
 };
 
 export default TypeButton;
-const Heigth_WIDTH = Dimensions.get("window").width * 0.7/3;
+const Heigth_WIDTH = (Dimensions.get("window").width * 0.7) / 3;
 const MARGIN = Dimensions.get("window").width * 0.025;
 
 const styles = StyleSheet.create({
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    margin:MARGIN,
+    margin: MARGIN,
   },
   text: {
     fontSize: 18,
@@ -51,8 +56,8 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  image:{
+  image: {
     width: 80,
     height: 80,
-  }
+  },
 });

@@ -144,7 +144,7 @@ const Folder = observer(({typesImg }) => {
             <View style={[content]}>
               <FlatList
                 data={typesImg}
-                renderItem={({ item }) => <TypeButton img={item.url} />}
+                renderItem={({ item }) => <TypeButton img={item.url} type={item.num} />}
                 keyExtractor={(item) => item.num}
                 numColumns={3}
               />

@@ -30,6 +30,19 @@ class PokeBattleBallModel {
       });
   }
 
+  @action setTipus(t) {
+    fetch("https://pokeapi.co/api/v2/type/" + t)
+      .then((res) => res.json())
+      .then((json) => {
+        json.pokemon.forEach((element) => {
+          this.data.push(element.pokemon);
+        });
+      });
+  }
+
+  @action setDefaultData(){
+    this.data = [];
+  }
 
   @observable filter = "";
 
@@ -46,7 +59,6 @@ class PokeBattleBallModel {
   @action defaultData() {
     this.data = this.pokemons;
   }
-
 
   @observable pokemonBo = 6;
 
@@ -114,7 +126,7 @@ class PokeBattleBallModel {
       .then((json) => {
         this.enemic = json;
         this.fullAttacksEnemics == [];
-        for (i = 1; i <=4; i++) {
+        for (i = 1; i <= 4; i++) {
           a = Math.floor(Math.random() * this.enemic.moves.length);
           fetch("https://pokeapi.co/api/v2/move/" + a + "/")
             .then((res) => res.json())
@@ -122,14 +134,12 @@ class PokeBattleBallModel {
               this.fullAttacksEnemics.push(json);
             });
         }
-      })
-
+      });
   }
 
   @observable fullAttacks = [];
 
   @action setFullAttacks() {
-    
     this.atacks.map((a) =>
       fetch("https://pokeapi.co/api/v2/move/" + a + "/")
         .then((res) => res.json())
