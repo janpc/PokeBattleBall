@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
   StyleSheet,
   TouchableHighlight,
@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { PokeContext } from "../model/Pokemon";
-import { observable } from "mobx";
 import { observer } from "mobx-react";
 const fonsFiltres = "../assets/combat.jpg";
 
@@ -22,17 +21,81 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 const Combat = observer(() => {
-  /////////////DATA/////////////////
+  const model = useContext(PokeContext);
+  const [isShowingText, setisShowingText] = useState(false);
+  const [end, setEnd] = useState(false);
+  const [perVidaAliat, setPerVidaAliat] = useState(1);
+  const [perVidaEnemic, setPerVidaEnemic] = useState(1);
+  const [misatge, setMisatge] = useState("");
+  const [torn, setTorn] = useState(true);
+  function showText(poke, att, damage) {
+    var m = "";
+    poke == 1
+      ? (m = capitalize(model.aliat.name) + " attacks ")
+      : (m = capitalize(model.enemic.name) + " attacks ");
+    poke == 1
+      ? (m += capitalize(model.enemic.name) + " using ")
+      : (m += capitalize(model.aliat.name) + " using ");
+    m += att + "\n";
+    m += "Damage: " + damage;
+    setMisatge(m);
+    setisShowingText(true);
+    setTorn(false);
+    this.timeoutHandle = setTimeout(() => {
+      setisShowingText(false);
+      if (poke == 1 && !end) {
+        var attack = model.fullAttacksEnemics[0];
+        var damage =
+          attack.power *
+          attackEffects[attack.type.name][model.aliat.types[0].type.name];
+        this.timeoutHandle = setTimeout(() => {
+          functionAttack(damage, false);
+          showText(2, attack.name, damage);
+        }, 1000);
+      } else if(!end) {
+        setTorn(true);
+      }
+    }, 3500);
+  }
+  // mira les vides i si s'ha eliminat a algun pokemos, s'espera 5s a que es mostri el missatge i mostra el missatge de victoria.
+  if (perVidaAliat == 0 && !end) {
+    setEnd(true);
+    this.timeoutHandle = setTimeout(() => {
+      model.setPagina(8);
+    }, 3600);
+  }
+  if (perVidaEnemic == 0 && !end) {
+    setEnd(true);
+    this.timeoutHandle = setTimeout(() => {
+      model.setPagina(7);
+    }, 3600);
+  }
+
+  function functionAttack(damage, aliat) {
+    var vida;
+    var vidaTotal;
+    if (aliat) {
+      vida = perVidaEnemic;
+      vidaTotal = model.enemic.stats[model.enemic.stats.length - 1].base_stat;
+      vida = (vida * vidaTotal - damage) / vidaTotal;
+      vida <= 0 ? setPerVidaEnemic(0) : setPerVidaEnemic(vida);
+    } else {
+      (vida = perVidaAliat),
+        (vidaTotal = model.aliat.stats[model.aliat.stats.length - 1].base_stat),
+        (vida = (vida * vidaTotal - damage) / vidaTotal);
+      vida < 0 ? setPerVidaAliat(0) : setPerVidaAliat(vida);
+    }
+  }
   useEffect(() => {
     model.setAliat();
     model.setEnemic();
-    model.setMoves();
+    model.setFullAttacks();
   }, []);
-  const model = useContext(PokeContext);
+
   const SE = 1.2;
   const NVE = 0.5;
   const NE = 0;
-  const moveEffects = {
+  const attackEffects = {
     bug: {
       bug: 1,
       dragon: 1,
@@ -462,8 +525,10 @@ const Combat = observer(() => {
     column,
     combatMain,
     atackView,
+    textFieldEmpty,
+    infoText,
   } = styles;
-  if (model.aliat == {} || model.enemic == {} || model.moves == []) {
+  if (model.aliat == {} || model.enemic == {} || model.fullAttacks == []) {
     <View style={combat}>
       <ImageBackground source={require(fonsFiltres)} style={fons}>
         <Icon
@@ -492,16 +557,37 @@ const Combat = observer(() => {
         <View style={[column, center, combatMain]}>
           <View style={[row]}>
             <PokeImg num={model.pokemonDolent} />
-            <PokeInfo name={model.enemic.name} enemic={true} />
+            <PokeInfo
+              name={model.enemic.name}
+              enemic={true}
+              perVida={perVidaEnemic}
+            />
           </View>
-          <View style={[textField, shadows]}></View>
+          {isShowingText ? (
+            <View style={[textField, shadows]}>
+              <Text style={[infoText]}>{misatge}</Text>
+            </View>
+          ) : (
+            <View style={[textFieldEmpty]}></View>
+          )}
           <View style={[row]}>
-            <PokeInfo name={model.aliat.name} enemic={false} />
+            <PokeInfo
+              name={model.aliat.name}
+              enemic={false}
+              perVida={perVidaAliat}
+            />
             <PokeImg num={model.pokemonBo} />
           </View>
           <View style={[atackView, column]}>
-            {model.moves.map((m) => (
-              <Atack move={m} moveEffects={moveEffects} />
+            {model.fullAttacks.map((m) => (
+              <Atack
+                attack={m}
+                attackEffects={attackEffects}
+                showText={showText}
+                torn={torn}
+                functionAttack={functionAttack}
+                key={m.id}
+              />
             ))}
           </View>
         </View>
@@ -510,50 +596,76 @@ const Combat = observer(() => {
   );
 });
 
-const Atack = ({ move, moveEffects }) => {
+const Atack = ({ attack, attackEffects, showText, torn, functionAttack }) => {
+  const random = Math.floor(Math.random() * 100) + 1;
   const model = useContext(PokeContext);
-  const { atack, shadows, atackText } = styles;
+  const { atack, shadows, atackText, atackOff } = styles;
   var name = "undefined";
-  if (typeof move.name !== "undefined") {
-    name = capitalize(move.name);
+  if (typeof attack.name !== "undefined") {
+    name = capitalize(attack.name);
   }
-
-  return (
+  return torn ? (
     <TouchableHighlight
       activeOpacity={0.5}
       underlayColor="#00000000"
       onPress={() => {
-        alert(
-          move.power *
-            moveEffects[move.type.name][model.enemic.types[0].type.name]
-        );
-        model.setPagina(7);
+        if (random > attack.accuracy) {
+          showText(1, name, "Missed");
+        } else {
+          damage =
+            attack.power *
+            attackEffects[attack.type.name][model.enemic.types[0].type.name];
+
+          functionAttack(
+            attack.power *
+              attackEffects[attack.type.name][model.enemic.types[0].type.name],
+            true
+          );
+          showText(1, name, damage);
+        }
       }}
     >
       <View style={[atack, shadows]}>
         <Text style={atackText}>{name}</Text>
       </View>
     </TouchableHighlight>
+  ) : (
+    <View style={[atackOff, shadows]}>
+      <Text style={atackText}>{name}</Text>
+    </View>
   );
 };
 
 const PokeImg = ({ num }) => {
   const { image, shadows, pokemonImgView } = styles;
+  const [error, setError] = num == null ? useState(true) : useState(false);
+  var uri = !error
+    ? "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" +
+      num +
+      ".png"
+    : "https://bluedomain.online/wp-content/uploads/ultimatemember/default_prof_pic.png";
   return (
     <View style={[pokemonImgView, shadows]}>
       <Image
         style={[image]}
         source={{
-          uri:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" +
-            num +
-            ".png",
+          uri: uri,
         }}
+        onError={() => setError(true)}
       />
     </View>
   );
 };
-const PokeInfo = ({ name, enemic }) => {
+const PokeInfo = ({ name, enemic, perVida }) => {
+  const vida = {
+    flex: 1,
+    height: 30,
+    width: perVida * 97 + "%",
+    borderRadius: 20,
+    margin: 3,
+    backgroundColor: "#04CF62",
+  };
+
   if (typeof name !== "undefined") {
     name = capitalize(name);
   }
@@ -563,7 +675,7 @@ const PokeInfo = ({ name, enemic }) => {
     vidaView,
     pokemonName,
     vidaBack,
-    vida,
+    //vida,
     nameView,
     amic,
   } = styles;
@@ -601,11 +713,19 @@ const BACKGROUND_COLOR = "#00000000";
 const WIDTH = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
+  infoText: {
+    fontSize: 18,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    fontFamily: "Lato-Regular",
+  },
   atackText: {
     fontSize: 18,
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
+    fontFamily: "Lato-Regular",
   },
   atackView: {
     margin: 10,
@@ -616,6 +736,13 @@ const styles = StyleSheet.create({
     width: WIDTH * 0.7,
     height: 40,
     backgroundColor: "#FFF082",
+    borderRadius: 20,
+    margin: 10,
+  },
+  atackOff: {
+    width: WIDTH * 0.7,
+    height: 40,
+    backgroundColor: "#FFF08299",
     borderRadius: 20,
     margin: 10,
   },
@@ -641,7 +768,7 @@ const styles = StyleSheet.create({
   pokemonName: {
     color: "white",
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Lato-Black",
   },
   nameView: {
     flex: 0.6,
@@ -667,9 +794,18 @@ const styles = StyleSheet.create({
   textField: {
     width: WIDTH * 0.7,
     height: 125,
-
     top: 0,
     backgroundColor: "white",
+    borderRadius: 20,
+    margin: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textFieldEmpty: {
+    width: WIDTH * 0.7,
+    height: 125,
+    top: 0,
+    backgroundColor: "#00000000",
     borderRadius: 20,
     margin: 20,
   },

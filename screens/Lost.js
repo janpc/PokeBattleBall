@@ -12,15 +12,15 @@ const WinBg = "../assets/backgroundWin.png";
 
 import PokeWinIcon from "../assets/pokeWinicon.png";
 import WinTick from "../assets/winTick.png";
-import youWin from "../assets/youWin.png";
+import youLost from "../assets/youLost.png";
 
-const Win = () => {
+const Lost = () => {
   const model = useContext(PokeContext);
   return (
     <View style={styles.page}>
       <ImageBackground source={require(WinBg)} style={styles.image}>
         <View>
-          <Image source={youWin} style={styles.youWin}></Image>
+          <Image source={youLost} style={styles.youLost}></Image>
 
         </View>
 
@@ -43,7 +43,7 @@ const Win = () => {
 const MAIN_MARGIN = Dimensions.get("window").width * 0.05;
 const WIDTH = Dimensions.get("window").width;
 
-export default Win;
+export default Lost;
 
 const styles = StyleSheet.create({
   page: {
@@ -72,11 +72,11 @@ const styles = StyleSheet.create({
     marginLeft: MAIN_MARGIN * 8,
     marginTop: MAIN_MARGIN * 2.5,
   },
-  youWin: {
+  youLost: {
     height: 100,
     width: WIDTH * 1,
     marginLeft: MAIN_MARGIN * 0.15,
     marginTop: MAIN_MARGIN * 7,
   },
-  
+
 });

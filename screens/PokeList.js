@@ -1,4 +1,4 @@
-import React, { useContext,  useState } from "react";
+import React, { useContext,  useState, useEffect} from "react";
 import { ActivityIndicator, Dimensions, FlatList, Image, ImageBackground, StyleSheet, TextInput, TouchableHighlight, View } from "react-native";
 import Back from "react-native-vector-icons/FontAwesome";
 import filter from "../assets/adjust_1.png";
@@ -13,16 +13,18 @@ const screenWidth = Dimensions.get("window").width;
 const pokeSize = Math.floor(screenWidth / numColumns);
 
 const PokePhoto = ({ id }) => {
-  const uri = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-
-  console.log(uri);
-  return <Image source={{ uri }} style={styles.photo} />;
+  const [error, setError] = useState(false);
+  var uri = !error ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png` : "https://bluedomain.online/wp-content/uploads/ultimatemember/default_prof_pic.png";
+  return <Image source={{ uri }} style={styles.photo} onError={() => setError(true)} />;
 };
 
 const PokeList = observer(() => {
-  const [photolist, setPhotolist] = useState(null);
+
   const model = useContext(PokeContext);
   
+  useEffect(() => {
+    model.setEmptyAliat();
+  }, []);
 
   if (model.pokemons == null) {
     return <ActivityIndicator size="large" />;
@@ -34,24 +36,26 @@ const PokeList = observer(() => {
         <Header/>
         <View style={styles.list}>
           <FlatList
-            data={model.data}
+            data={model.data.slice(0, model.data.length-2)} //mobx es queixava de que s’intentava excedir a posicions de memòria que no existeixen (la 964 i 965 sobre 964) 
+            initialNumToRender={24}
             numColumns={numColumns}
             renderItem={({ item }) => (
               <TouchableHighlight
                 activeOpacity={0.5}
                 underlayColor="#00000000"
                 onPress={() => {
-                  model.setPagina(5);
                   model.setPokemonBo(item.url.substring(34, item.url.length - 1));
+                  model.setPagina(5);
+                  model.defaultData();
                 }}
               >
                 <View style={[styles.backPoke, styles.shadows]}>
-                  <PokePhoto id={item.url.substring(34, item.url.length - 1)} />
+                  <PokePhoto id={item.url!=null? item.url.substring(34, item.url.length - 1) : null} />
                 </View>
               </TouchableHighlight>
             )}
             keyExtractor={(item, index) =>
-              item.url.substring(34, item.url.length - 1)
+              item.name
             }
             
           />
@@ -76,7 +80,7 @@ const Header = () => {
         onPress={() => model.setPagina(2)}
       />
       <View style={[styles.searcher, styles.shadows]}>
-        <TextInput placeholder="search..." onChangeText={text => model.filtering(text)}/>
+        <TextInput style={styles.font} placeholder="search..." onChangeText={text => model.filtering(text)}/>
       </View>
       <TouchableHighlight
         activeOpacity={0.5}
@@ -192,4 +196,7 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
   },
+  font: {
+    fontFamily: "Lato-Regular",
+  }
 });

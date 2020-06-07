@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import tick from "../assets/tick.png";
-import {PokeContext } from "../model/Pokemon";
+import { PokeContext } from "../model/Pokemon";
 import { observer } from "mobx-react";
 const fonsInfo = "../assets/info.png";
 
@@ -46,78 +46,80 @@ const PokeInfo = observer(() => {
     row,
   } = styles;
   const model = useContext(PokeContext);
-  if (model.aliatLoaded) {
-    return (
-      <View style={[pokeInfo]}>
-        <ImageBackground source={require(fonsInfo)} style={fons}>
-          <Icon
-            name="chevron-left"
-            size={36}
-            color={"white"}
-            backgroundColor="#3b5998"
-            onPress={() => model.setPagina(3)}
-            style={[shadows, back]}
-          />
-          <View style={[fullWidth, center]}>
-            <View style={[row]}>
-              <View style={[nameView]}>
-                <Text style={[pokemonName, shadows]}>
-                  {capitalize(model.aliat.name)}
-                </Text>
+
+  return (
+    <View style={[pokeInfo]}>
+      <ImageBackground source={require(fonsInfo)} style={fons}>
+        <Icon
+          name="chevron-left"
+          size={36}
+          color={"white"}
+          backgroundColor="#3b5998"
+          onPress={() => model.setPagina(3)}
+          style={[shadows, back]}
+        />
+        {model.aliat.name != null ? (
+          <View>
+            <View style={[fullWidth, center]}>
+              <View style={[row]}>
+                <View style={[nameView]}>
+                  <Text style={[pokemonName, shadows]}>
+                    {capitalize(model.aliat.name)}
+                  </Text>
+                </View>
+                <PokeImg link={model.aliat.sprites.front_default} />
               </View>
-              <PokeImg link={model.aliat.sprites.front_default} />
+              <Folder isShowingFirst={isShowingFirst} _change={_change} />
             </View>
-            <Folder
-              isShowingFirst={isShowingFirst}
-              _change={_change}
-            />
+            <TouchableHighlight
+              activeOpacity={0.5}
+              underlayColor="#00000000"
+              onPress={() => {
+                if (model.atacks.length < 4) {
+                  alert(
+                    "You have to select 4 attacks, you only have " +
+                      model.atacks.length +
+                      " selected"
+                  );
+                } else {
+                  model.setPokmondolent();
+                  model.setPagina(6);
+                }
+              }}
+            >
+              <Image source={tick} style={styles.tick} />
+            </TouchableHighlight>
           </View>
-          <TouchableHighlight
-            activeOpacity={0.5}
-            underlayColor="#00000000"
-            onPress={() => model.setPagina(6)}
-          >
-            <Image source={tick} style={styles.tick} />
-          </TouchableHighlight>
-        </ImageBackground>
-      </View>
-    );
-  } else {
-    return (
-      <View style={[pokeInfo]}>
-        <ImageBackground source={require(fonsInfo)} style={fons}>
-          <Icon
-            name="chevron-left"
-            size={36}
-            color={"white"}
-            backgroundColor="#3b5998"
-            onPress={() => model.setPagina(3)}
-            style={[shadows, back]}
-          />
+        ) : (
           <ActivityIndicator size="large" />
-        </ImageBackground>
-      </View>
-    );
-  }
+        )}
+      </ImageBackground>
+    </View>
+  );
 });
 
 export default PokeInfo;
 
 const PokeImg = ({ link }) => {
   const { image, shadows, pokemonImgView } = styles;
+  const [error, setError] = link == null ? useState(true) : useState(false);
+  var uri = !error
+    ? link
+    : "https://bluedomain.online/wp-content/uploads/ultimatemember/default_prof_pic.png";
   return (
     <View style={[pokemonImgView, shadows]}>
       <Image
         style={[image]}
         source={{
-          uri: link,
+          uri: uri,
         }}
+        onError={() => setError(true)}
       />
     </View>
   );
 };
 
-const Folder = ({ isShowingFirst, _change}) => {
+const Folder = ({ isShowingFirst, _change }) => {
   const {
     backSquare,
     topSquare,
@@ -135,16 +137,19 @@ const Folder = ({ isShowingFirst, _change}) => {
   } = styles;
   const model = useContext(PokeContext);
   const listTypes = model.aliat.types.map((item) => (
-    <Text style={mainText} key={item.slot}> -{capitalize(item.type.name)}</Text>
+    <Text style={mainText} key={item.type.name}>
+      {" "}
+      -{capitalize(item.type.name)}
+    </Text>
   ));
-  
-  const listStats= model.aliat.stats.map((item) => (
+
+  const listStats = model.aliat.stats.map((item) => (
     <View style={row} key={item.stat.name}>
       <Text style={title}>{capitalize(item.stat.name)}:</Text>
       <Text style={mainText}> {item.base_stat}</Text>
     </View>
   ));
-  
+
   if (isShowingFirst) {
     return (
       <View style={[shadows, backSquare]}>
@@ -165,9 +170,7 @@ const Folder = ({ isShowingFirst, _change}) => {
                 <FlatList
                   data={model.aliat.moves}
                   renderItem={({ item }) => <Atack move={item.move} />}
-                  keyExtractor={(item, index) => {
-                    index.toString() + item.move.name
-                  }}
+                  keyExtractor={(item) => item.move.name}
                   numColumns={1}
                 />
               </View>
@@ -212,27 +215,28 @@ const Folder = ({ isShowingFirst, _change}) => {
   }
 };
 
-const Atack = ({ move }) => {
-  const { atack, shadows, atackText } = styles;
+const Atack = observer(({ move }) => {
+  const model = useContext(PokeContext);
+  const { atack, shadows, atackText, atackOn } = styles;
   var name = "undefined";
   if (typeof move.name !== "undefined") {
     name = capitalize(move.name);
   }
-
+  var id = move.url.substring(31, move.url.length - 1);
   return (
     <TouchableHighlight
       activeOpacity={0.5}
       underlayColor="#00000000"
       onPress={() => {
-        alert("atack");
+        model.toggleAtack(id);
       }}
     >
-      <View style={[atack, shadows]}>
+      <View style={[model.includesAtack(id) ? atackOn : atack, shadows]}>
         <Text style={atackText}>{name}</Text>
       </View>
     </TouchableHighlight>
   );
-};
+});
 
 //color de fons
 const BACKGROUND_COLOR = "#123456";
@@ -259,15 +263,18 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: 16,
     marginTop: MAIN_MARGIN * 0.25,
+    fontFamily: "Lato-Regular",
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
     marginBottom: MAIN_MARGIN * 0.25,
     marginTop: MAIN_MARGIN * 0.25,
+    fontFamily: "Lato-Black",
   },
   atackText: {
     fontSize: 18,
+    color: "white",
+    fontFamily: "Lato-Black",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -275,9 +282,18 @@ const styles = StyleSheet.create({
   atack: {
     width: MAIN_WIDTH * 0.85,
     height: 40,
-    backgroundColor: "#FFF082",
+    backgroundColor: "#5FC0DF",
     borderRadius: 20,
     margin: 10,
+    justifyContent: "center",
+  },
+  atackOn: {
+    width: MAIN_WIDTH * 0.85,
+    height: 40,
+    backgroundColor: "#04CF62",
+    borderRadius: 20,
+    margin: 10,
+    justifyContent: "center",
   },
   shadows: {
     shadowColor: "black",
@@ -377,7 +393,7 @@ const styles = StyleSheet.create({
   topText: {
     fontSize: 16,
     textAlign: "center",
-    fontWeight: "bold",
+    fontFamily: "Lato-Black",
   },
   row: {
     flexDirection: "row",
@@ -402,8 +418,8 @@ const styles = StyleSheet.create({
   pokemonName: {
     color: "white",
     fontSize: 26,
-    fontWeight: "bold",
     marginLeft: 10,
+    fontFamily: "Lato-Black",
   },
   nameView: {
     flexDirection: "column",

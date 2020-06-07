@@ -249,6 +249,7 @@ const styles = StyleSheet.create({
   topText: {
     fontSize: 24,
     textAlign: "center",
+    fontFamily: "Lato-Regular",
   },
   row: {
     flexDirection: "row",

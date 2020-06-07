@@ -30,13 +30,13 @@ const Input = () => {
   return(
     <View style={styles.login}>
         <View style={[styles.input, styles.shadows]}>
-          <TextInput placeholder="email@hotmail.com" />
+          <TextInput style={styles.font} placeholder="email@hotmail.com" />
         </View>
 
         <View style={styles.space} />
 
         <View style={[styles.input, styles.shadows]}>          
-          <TextInput placeholder="*********" />
+          <TextInput style={styles.font} placeholder="*********" />
         </View>
 
         <View style={styles.space} />
@@ -132,5 +132,8 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
   },
+  font: {
+    fontFamily: "Lato-Regular",
+  }
 
 });

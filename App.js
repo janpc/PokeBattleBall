@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import "mobx-react-lite/batchingForReactNative";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import React, { useEffect, useContext } from "react";
 import Filtres from "./screens/Filtres";
 import Combat from "./screens/Combat";
 import PokeInfo from "./screens/PokeInfo";
@@ -7,20 +8,37 @@ import BattleVS from "./screens/BattleVS";
 import Login from "./screens/Login";
 import PokeList from "./screens/PokeList";
 import Win from "./screens/Win";
-import { apisAreAvailable } from "expo";
+import Lost from "./screens/Lost";
 import { PokemonProvider, PokeContext } from "./model/Pokemon";
 import { observer } from "mobx-react";
+import { useFonts}  from '@use-expo/font';
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Lato-Regular": require("./assets/fonts/Lato-Regular.ttf"),
+    "Lato-Bold": require("./assets/fonts/Lato-Bold.ttf"),
+    "Lato-Black": require("./assets/fonts/Lato-Black.ttf"),
+  });
+
   const model = useContext(PokeContext);
   useEffect(() => {
-      model.setPokemons();
+    model.setPokemons();
   }, []);
+
+  if(!fontsLoaded){
+    return(
+      <View>
+        <ActivityIndicator />
+      </View>
+    )
+  } 
+  
   return (
     <PokemonProvider>
       <Pagina />
     </PokemonProvider>
-  )
+  );
+  
 }
 
 const Pagina = observer(() => {
@@ -29,7 +47,7 @@ const Pagina = observer(() => {
     case 1:
       return (
         <View style={styles.container}>
-          <Login/>
+          <Login />
         </View>
       );
       break;
@@ -43,41 +61,49 @@ const Pagina = observer(() => {
     case 3:
       return (
         <View style={styles.container}>
-          <PokeList/>
+          <PokeList />
         </View>
       );
       break;
     case 4:
       return (
         <View style={styles.container}>
-          <Filtres/>
+          <Filtres />
         </View>
       );
       break;
     case 5:
       return (
         <View style={styles.container}>
-          <PokeInfo/>
+          <PokeInfo />
         </View>
       );
       break;
     case 6:
       return (
         <View style={styles.container}>
-          <Combat/>
+          <Combat />
         </View>
       );
       break;
-    case 7: {
+    case 7: 
       return (
         <View style={styles.container}>
           <Win />
         </View>
       );
       break;
+    case 8: {
+    return (
+      <View style={styles.container}>
+        <Lost />
+      </View>
+    );
+    break;
     }
     default:
       break;
+    
   }
 });
 const styles = StyleSheet.create({
