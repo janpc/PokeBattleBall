@@ -53,7 +53,7 @@ const PokeList = observer(() => {
             keyExtractor={(item, index) =>
               item.url.substring(34, item.url.length - 1)
             }
-            length={model.data.length}
+            
           />
         </View>
       </ImageBackground>

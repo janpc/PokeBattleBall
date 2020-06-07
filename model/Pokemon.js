@@ -21,6 +21,16 @@ class PokeBattleBallModel {
 
   @observable data = [];
 
+  @action genFilter(g) {
+    fetch("https://pokeapi.co/api/v2/generation/1/")
+      .then((res) => res.json())
+      .then((json) => {
+        this.data = json.results;
+        alert(g);
+      });
+  }
+
+
   @observable filter = "";
 
   @action filtering(f) {
@@ -36,6 +46,7 @@ class PokeBattleBallModel {
       this.data = this.pokemons;
     }
   }
+
 
   @observable pokemonBo = 6;
 

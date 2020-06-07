@@ -1,11 +1,20 @@
-import React, { useState } from "react";
-import { StyleSheet, Dimensions, View, Text } from "react-native";
+import React, { useState, useContext } from "react";
+import { StyleSheet, Dimensions, View, Text, TouchableHighlight } from "react-native";
+import {PokeContext } from "../model/Pokemon";
 
-const GenerationButton = ({ generation }) => {
+const GenerationButton = ({ generation, g}) => {
   const { genButton, text, shadows } = styles;
+  const model = useContext(PokeContext);
   return (
     <View style={[genButton, shadows]}>
+      <TouchableHighlight
+        onPress={() => {
+          model.genFilter(g);
+          model.setPagina(3);
+          
+        }}>
         <Text style={text}>{generation}</Text>
+      </TouchableHighlight>        
     </View>
   );
 };

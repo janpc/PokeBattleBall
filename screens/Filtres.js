@@ -112,7 +112,8 @@ const Folder = observer(({typesImg }) => {
                 data={model.generation}
                 renderItem={({ item }) => (
                   <GenerationButton
-                    generation={item.name.substring(11).toUpperCase()}
+                    generation={item.name.substring(11).toUpperCase()}   
+                    g = {item.url.substring(item.url.length - 2, item.url.length - 1)}             
                   />
                 )}
                 keyExtractor={(item) =>
